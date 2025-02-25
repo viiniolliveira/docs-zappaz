@@ -2,85 +2,809 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Zappaz API",
-    "description": "API for managing WhatsApp sessions and webhooks",
+    "description": "API for sending messages and managing webhooks",
     "version": "1.0.0"
   },
+  "servers": [
+    {
+      "url": "https://dev.zappazapi.com/api/v1",
+      "description": "Development API Server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "User or Session token, directly passed as a string in the 'Authorization' header. The user token has scope over all sessions owned by the user. The session token is limited to the session itself."
+      }
+    },
+    "parameters": {
+      "sessionId": {
+        "in": "path",
+        "name": "sessionId",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Unique identifier for the session"
+      },
+      "webhookId": {
+        "in": "path",
+        "name": "webhookId",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Unique identifier for the webhook"
+      },
+      "jid": {
+        "in": "path",
+        "name": "jid",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "WhatsApp JID of the contact"
+      }
+    },
+    "schemas": {
+      "SessionConfig": {
+        "type": "object",
+        "properties": {
+          "messageOnCall": {
+            "type": "string",
+            "description": "A message to be sent when a call is received. When messageOnCall is set, the call incoming call will be rejected and the message will be sent to the caller."
+          },
+          "rejectCalls": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether to reject incoming calls"
+          },
+          "ignoreGroups": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether to ignore groups"
+          },
+          "syncFullHistory": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether to sync a chat's full history"
+          },
+          "markOnlineOnConnect": {
+            "type": "boolean",
+            "default": false,
+            "description": "When set to true, as soon as a session is connected, contacts will always see the user as online."
+          },
+          "clientConnectionName": {
+            "type": "string",
+            "description": "The name of the client connection. This name is shown on the list of connected clients."
+          }
+        }
+      },
+      "TextMessage": {
+        "type": "object",
+        "required": [
+          "number",
+          "message"
+        ],
+        "properties": {
+          "number": {
+            "type": "string",
+            "description": "WhatsApp number to send the message to",
+            "example": "5511999999999"
+          },
+          "message": {
+            "type": "string",
+            "description": "Message to send",
+            "example": "Hello, how are you?"
+          },
+          "mentions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "(Optional) An array of JIDs or phone numbers to mention in the message",
+            "example": [
+              "5511999999999",
+              "5511999999999@s.whatsapp.net"
+            ]
+          },
+          "quoted": {
+            "type": "string",
+            "description": "(Optional) Message ID of the message to quote",
+            "example": "3EB0B5EED74106A7F4EC06"
+          },
+          "delay": {
+            "type": "number",
+            "description": "(Optional) Delay in seconds before sending the message (typing...)",
+            "example": 2000
+          },
+          "linkPreview": {
+            "type": "boolean",
+            "default": true,
+            "description": "(Optional) Whether to include a link preview when a message contains a link"
+          }
+        }
+      },
+      "ImageMessage": {
+        "type": "object",
+        "required": [
+          "number",
+          "source"
+        ],
+        "properties": {
+          "number": {
+            "type": "string",
+            "description": "WhatsApp number to send the message to",
+            "example": "5511999999999"
+          },
+          "source": {
+            "type": "string",
+            "description": "URL to an image or raw base64 encoded image data (without any data URI scheme prefix like 'data:image/jpeg;base64,')",
+            "example": "https://example.com/image.jpg"
+          },
+          "fileName": {
+            "type": "string",
+            "description": "(Optional) Custom filename for the image",
+            "example": "my-image.jpg"
+          },
+          "caption": {
+            "type": "string",
+            "description": "(Optional) Caption for the image",
+            "example": "Check out this image!"
+          },
+          "mentions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "(Optional) An array of JIDs or phone numbers to mention in the caption",
+            "example": [
+              "5511999999999",
+              "5511999999999@s.whatsapp.net"
+            ]
+          },
+          "quoted": {
+            "type": "string",
+            "description": "(Optional) Message ID of the message to quote",
+            "example": "3EB0B5EED74106A7F4EC06"
+          },
+          "delay": {
+            "type": "number",
+            "description": "(Optional) Delay in seconds before sending the message",
+            "example": 2000
+          }
+        }
+      },
+      "VideoMessage": {
+        "type": "object",
+        "required": [
+          "number",
+          "source"
+        ],
+        "properties": {
+          "number": {
+            "type": "string",
+            "description": "WhatsApp number to send the message to",
+            "example": "5511999999999"
+          },
+          "source": {
+            "type": "string",
+            "description": "URL to a video file or raw base64 encoded video data (without any data URI scheme prefix like 'data:video/mp4;base64,')",
+            "example": "https://example.com/video.mp4"
+          },
+          "fileName": {
+            "type": "string",
+            "description": "(Optional) Custom filename for the video",
+            "example": "my-video.mp4"
+          },
+          "caption": {
+            "type": "string",
+            "description": "(Optional) Caption for the video",
+            "example": "Check out this video!"
+          },
+          "gifPlayback": {
+            "type": "boolean",
+            "default": false,
+            "description": "(Optional) Whether to send the video as a GIF"
+          },
+          "mentions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "(Optional) An array of JIDs or phone numbers to mention in the caption",
+            "example": [
+              "5511999999999",
+              "5511999999999@s.whatsapp.net"
+            ]
+          },
+          "quoted": {
+            "type": "string",
+            "description": "(Optional) Message ID of the message to quote",
+            "example": "3EB0B5EED74106A7F4EC06"
+          },
+          "delay": {
+            "type": "number",
+            "description": "(Optional) Delay in seconds before sending the message",
+            "example": 2000
+          }
+        }
+      },
+      "AudioMessage": {
+        "type": "object",
+        "required": [
+          "number",
+          "source"
+        ],
+        "properties": {
+          "number": {
+            "type": "string",
+            "description": "WhatsApp number to send the message to",
+            "example": "5511999999999"
+          },
+          "source": {
+            "type": "string",
+            "description": "URL to an audio file or raw base64 encoded audio data (without any data URI scheme prefix like 'data:audio/mp3;base64,')",
+            "example": "https://example.com/audio.mp3"
+          },
+          "caption": {
+            "type": "string",
+            "description": "(Optional) Caption for the audio",
+            "example": "Check out this audio!"
+          },
+          "mentions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "(Optional) An array of JIDs or phone numbers to mention in the caption",
+            "example": [
+              "5511999999999",
+              "5511999999999@s.whatsapp.net"
+            ]
+          },
+          "quoted": {
+            "type": "string",
+            "description": "(Optional) Message ID of the message to quote",
+            "example": "3EB0B5EED74106A7F4EC06"
+          },
+          "delay": {
+            "type": "number",
+            "description": "(Optional) Delay in seconds before sending the message",
+            "example": 2000
+          }
+        }
+      },
+      "DocumentMessage": {
+        "type": "object",
+        "required": [
+          "number",
+          "source"
+        ],
+        "properties": {
+          "number": {
+            "type": "string",
+            "description": "WhatsApp number to send the message to",
+            "example": "5511999999999"
+          },
+          "source": {
+            "type": "string",
+            "description": "URL to a document file or raw base64 encoded document data (without any data URI scheme prefix like 'data:application/pdf;base64,')",
+            "example": "https://example.com/document.pdf"
+          },
+          "fileName": {
+            "type": "string",
+            "description": "(Optional) Custom filename for the document",
+            "example": "my-document.pdf"
+          },
+          "caption": {
+            "type": "string",
+            "description": "(Optional) Caption for the document",
+            "example": "Check out this document!"
+          },
+          "mentions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "(Optional) An array of JIDs or phone numbers to mention in the caption",
+            "example": [
+              "5511999999999",
+              "5511999999999@s.whatsapp.net"
+            ]
+          },
+          "quoted": {
+            "type": "string",
+            "description": "(Optional) Message ID of the message to quote",
+            "example": "3EB0B5EED74106A7F4EC06"
+          },
+          "delay": {
+            "type": "number",
+            "description": "(Optional) Delay in seconds before sending the message",
+            "example": 2000
+          }
+        }
+      },
+      "ContactMessage": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "string",
+            "description": "WhatsApp number to send the message to",
+            "example": "5511999999999"
+          },
+          "contact": {
+            "type": "object",
+            "properties": {
+              "phoneNumber": {
+                "type": "string",
+                "description": "The contact's phone number",
+                "example": "5511999999999"
+              },
+              "firstName": {
+                "type": "string",
+                "description": "The contact's first name",
+                "example": "John"
+              },
+              "lastName": {
+                "type": "string",
+                "description": "The contact's last name",
+                "example": "Doe"
+              }
+            },
+            "required": [
+              "phoneNumber"
+            ]
+          },
+          "delay": {
+            "type": "number",
+            "description": "(Optional) Delay in seconds before sending the message (typing...)",
+            "example": 2000
+          }
+        },
+        "required": [
+          "number",
+          "contact"
+        ]
+      },
+      "LocationMessage": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "string",
+            "description": "WhatsApp number to send the message to",
+            "example": "5511999999999"
+          },
+          "latitude": {
+            "type": "number",
+            "description": "Latitude of the location",
+            "example": -22.9110137
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitude of the location",
+            "example": -43.2093727
+          },
+          "address": {
+            "type": "string",
+            "description": "Address of the location",
+            "example": "Rua das Flores, 123"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the location",
+            "example": "Casa do João"
+          }
+        },
+        "required": [
+          "number"
+        ]
+      },
+      "MessageResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "success",
+              "failed"
+            ]
+          },
+          "data": {
+            "type": "object"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "failed"
+            ]
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "WebhookResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "success",
+              "error"
+            ]
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookData"
+          }
+        }
+      },
+      "WebhookData": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the webhook"
+          },
+          "url": {
+            "type": "string",
+            "description": "URL where webhook events will be sent"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Optional display name for the webhook"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Whether the webhook is active"
+          },
+          "events": {
+            "$ref": "#/components/schemas/WebhookEventsSchema",
+            "description": "Configuration of which events this webhook subscribes to"
+          },
+          "headers": {
+            "type": "object",
+            "description": "Custom headers to be sent with webhook requests",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the webhook was created"
+          },
+          "waSessionId": {
+            "type": "string",
+            "description": "ID of the WhatsApp session this webhook belongs to"
+          }
+        }
+      },
+      "WebhookListResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "success",
+              "error"
+            ]
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WebhookData"
+            }
+          },
+          "page": {
+            "type": "string",
+            "description": "Current page number"
+          },
+          "pageSize": {
+            "type": "string",
+            "description": "Number of items per page"
+          },
+          "total": {
+            "type": "number",
+            "description": "Total number of webhooks"
+          }
+        }
+      },
+      "WebhookEventsSchema": {
+        "type": "object",
+        "properties": {
+          "call": {
+            "type": "boolean",
+            "default": false
+          },
+          "blocklist.set": {
+            "type": "boolean",
+            "default": false
+          },
+          "blocklist.update": {
+            "type": "boolean",
+            "default": false
+          },
+          "chats.delete": {
+            "type": "boolean",
+            "default": false
+          },
+          "chats.phoneNumberShare": {
+            "type": "boolean",
+            "default": false
+          },
+          "chats.update": {
+            "type": "boolean",
+            "default": false
+          },
+          "chats.upsert": {
+            "type": "boolean",
+            "default": false
+          },
+          "connection.update": {
+            "type": "boolean",
+            "default": false
+          },
+          "contacts.update": {
+            "type": "boolean",
+            "default": false
+          },
+          "contacts.upsert": {
+            "type": "boolean",
+            "default": false
+          },
+          "creds.update": {
+            "type": "boolean",
+            "default": false
+          },
+          "group-participants.update": {
+            "type": "boolean",
+            "default": false
+          },
+          "group.join-request": {
+            "type": "boolean",
+            "default": false
+          },
+          "groups.update": {
+            "type": "boolean",
+            "default": false
+          },
+          "groups.upsert": {
+            "type": "boolean",
+            "default": false
+          },
+          "labels.association": {
+            "type": "boolean",
+            "default": false
+          },
+          "labels.edit": {
+            "type": "boolean",
+            "default": false
+          },
+          "message-receipt.update": {
+            "type": "boolean",
+            "default": false
+          },
+          "messages.delete": {
+            "type": "boolean",
+            "default": false
+          },
+          "messages.media-update": {
+            "type": "boolean",
+            "default": false
+          },
+          "messages.reaction": {
+            "type": "boolean",
+            "default": false
+          },
+          "messages.send": {
+            "type": "boolean",
+            "default": false
+          },
+          "messages.update": {
+            "type": "boolean",
+            "default": false
+          },
+          "messaging-history.set": {
+            "type": "boolean",
+            "default": false
+          },
+          "presence.update": {
+            "type": "boolean",
+            "default": false
+          },
+          "inbound-message.upsert": {
+            "type": "boolean",
+            "default": false
+          },
+          "outbound-message.upsert": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "CreateWebhookBodySchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "events": {
+            "$ref": "#/components/schemas/WebhookEventsSchema"
+          },
+          "headers": {
+            "type": "object"
+          }
+        }
+      },
+      "CreateGroupSchema": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the group",
+            "example": "My Group"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the group",
+            "example": "This is a group for my friends"
+          }
+        }
+      },
+      "UpdateDisplayPicture": {
+        "type": "object",
+        "required": [
+          "identifier",
+          "source"
+        ],
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "description": "Identifier for display picture update."
+          },
+          "source": {
+            "type": "string",
+            "description": "URL or base64 encoded string for the new display picture."
+          }
+        }
+      },
+      "UpdateProfileStatus": {
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "New profile status."
+          }
+        }
+      },
+      "UpdateProfileName": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "New profile name."
+          }
+        }
+      },
+      "PrivacySettings": {
+        "type": "object",
+        "properties": {
+          "lastSeen": {
+            "type": "string",
+            "description": "Privacy level for last seen (e.g., 'everyone', 'contacts', 'nobody')"
+          },
+          "online": {
+            "type": "string",
+            "description": "Privacy level for online status"
+          },
+          "profilePicture": {
+            "type": "string",
+            "description": "Privacy level for profile picture"
+          },
+          "status": {
+            "type": "string",
+            "description": "Privacy level for status"
+          },
+          "readReceipts": {
+            "type": "string",
+            "description": "Privacy level for read receipts"
+          },
+          "groupsAdd": {
+            "type": "string",
+            "description": "Privacy level for groups add"
+          }
+        }
+      },
+      "UpdatePrivacyValue": {
+        "type": "object",
+        "required": [
+          "privacy"
+        ],
+        "properties": {
+          "privacy": {
+            "type": "string",
+            "description": "New privacy setting (e.g., 'everyone', 'contacts', 'nobody')"
+          }
+        }
+      },
+      "UpdateDefaultDisappearingMode": {
+        "type": "object",
+        "required": [
+          "mode"
+        ],
+        "properties": {
+          "mode": {
+            "type": "string",
+            "description": "Default disappearing mode (e.g., '24h', '7d', 'custom')"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Messages",
+      "description": "Message sending operations"
+    },
+    {
+      "name": "Webhooks",
+      "description": "Webhook management operations"
+    },
+    {
+      "name": "Actions",
+      "description": "WhatsApp actions like profile management and contact operations"
+    },
+    {
+      "name": "Groups",
+      "description": "WhatsApp group management operations"
+    },
+    {
+      "name": "Privacy",
+      "description": "Privacy settings management"
+    }
+  ],
   "paths": {
-    "/session/{sessionId}/connect": {
-      "post": {
-        "summary": "Connect session",
-        "description": "Connects the specified WhatsApp session. This endpoint initializes an active connection for the session.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/sessionId"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Session connected successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MessageResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request or session not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/session/{sessionId}/logout": {
-      "put": {
-        "summary": "Logout session",
-        "description": "Logs out of the specified WhatsApp session.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/sessionId"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Session logged out successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MessageResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request or session not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/session/{sessionId}/message/text": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/sessionId"
+        }
+      ],
       "post": {
-        "summary": "Send text message",
-        "description": "Sends a text message using the specified WhatsApp session.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/sessionId"
-          }
+        "tags": [
+          "Messages"
         ],
+        "summary": "Send text message",
+        "description": "Sends a text message to a specified WhatsApp number.",
         "requestBody": {
           "required": true,
           "content": {
@@ -103,33 +827,53 @@
             }
           },
           "400": {
-            "description": "Invalid request"
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/session/{sessionId}/message/media": {
+    "/session/{sessionId}/message/image": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/sessionId"
+        }
+      ],
       "post": {
-        "summary": "Send media message",
-        "description": "Sends a media message using the specified WhatsApp session.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/sessionId"
-          }
+        "tags": [
+          "Messages"
         ],
+        "summary": "Send image message",
+        "description": "Sends an image message to a specified WhatsApp number. The 'source' parameter can be either a URL to an image or a raw base64 encoded string of the image data (without any data URI scheme prefix).",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/MediaMessage"
+                "$ref": "#/components/schemas/ImageMessage"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Media message sent successfully",
+            "description": "Image message sent successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -139,20 +883,208 @@
             }
           },
           "400": {
-            "description": "Invalid request"
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/session/{sessionId}/message/video": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/sessionId"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Send video message",
+        "description": "Sends a video message to a specified WhatsApp number. The 'source' parameter can be either a URL to a video file or a raw base64 encoded string of the video data (without any data URI scheme prefix).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VideoMessage"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Video message sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/session/{sessionId}/message/audio": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/sessionId"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Send audio message",
+        "description": "Sends an audio message to a specified WhatsApp number. The 'source' parameter can be either a URL to an audio file or a raw base64 encoded string of the audio data (without any data URI scheme prefix).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AudioMessage"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Audio message sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/session/{sessionId}/message/document": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/sessionId"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Send document message",
+        "description": "Sends a document message to a specified WhatsApp number. The 'source' parameter can be either a URL to a document file or a raw base64 encoded string of the document data (without any data URI scheme prefix).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DocumentMessage"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Document message sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/session/{sessionId}/message/contact": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/sessionId"
+        }
+      ],
       "post": {
+        "tags": [
+          "Messages"
+        ],
         "summary": "Send contact message",
         "description": "Sends a contact message to a specified WhatsApp number.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/sessionId"
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -175,20 +1107,40 @@
             }
           },
           "400": {
-            "description": "Invalid request"
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/session/{sessionId}/message/location": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/sessionId"
+        }
+      ],
       "post": {
-        "summary": "Send location message",
-        "description": "Sends a location message using the specified WhatsApp session.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/sessionId"
-          }
+        "tags": [
+          "Messages"
         ],
+        "summary": "Send location message",
+        "description": "Sends a location message to a specified WhatsApp number. At least one of either address or coordinates is required. When both are provided, coordinates take precedence. When latitude and longitude are not provided, we try to look up the address for you.",
         "requestBody": {
           "required": true,
           "content": {
@@ -211,82 +1163,212 @@
             }
           },
           "400": {
-            "description": "Invalid request"
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/session/{sessionId}/webhook": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/sessionId"
+        }
+      ],
       "get": {
-        "summary": "Get webhooks",
-        "description": "Retrieves all webhooks for the specified session.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/sessionId"
-          }
+        "tags": [
+          "Webhooks"
         ],
+        "summary": "Get webhooks",
+        "description": "Retrieves all webhooks for the specified session",
         "responses": {
           "200": {
-            "description": "Webhooks retrieved successfully"
+            "description": "List of webhooks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookListResponse"
+                }
+              }
+            }
           }
         }
       },
       "post": {
-        "summary": "Create webhook",
-        "description": "Creates a new webhook for the specified session.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/sessionId"
-          }
+        "tags": [
+          "Webhooks"
         ],
+        "summary": "Create webhook",
+        "description": "Creates a new webhook for the specified session",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Webhook"
+                "$ref": "#/components/schemas/CreateWebhookBodySchema"
               }
             }
           }
         },
         "responses": {
-          "200": {
-            "description": "Webhook created successfully"
+          "201": {
+            "description": "Webhook created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/session/{sessionId}/webhook/{webhookId}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/sessionId"
+        },
+        {
+          "$ref": "#/components/parameters/webhookId"
+        }
+      ],
       "put": {
-        "summary": "Update webhook",
-        "description": "Updates an existing webhook.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/sessionId"
-          },
-          {
-            "$ref": "#/components/parameters/webhookId"
-          }
+        "tags": [
+          "Webhooks"
         ],
+        "summary": "Update webhook",
+        "description": "Updates an existing webhook for the specified session",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Webhook"
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "description": "URL where webhook events will be sent"
+                  },
+                  "displayName": {
+                    "type": "string",
+                    "description": "Optional display name for the webhook"
+                  },
+                  "enabled": {
+                    "type": "boolean",
+                    "description": "Whether the webhook is active"
+                  },
+                  "events": {
+                    "$ref": "#/components/schemas/WebhookEventsSchema",
+                    "description": "Configuration of which events this webhook subscribes to"
+                  },
+                  "headers": {
+                    "type": "object",
+                    "description": "Custom headers to be sent with webhook requests",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  }
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Webhook updated successfully"
+            "description": "Webhook updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Webhook not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       },
       "delete": {
+        "tags": [
+          "Webhooks"
+        ],
         "summary": "Delete webhook",
-        "description": "Removes the specified webhook.",
+        "description": "Deletes an existing webhook for the specified session",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -297,56 +1379,736 @@
         ],
         "responses": {
           "200": {
-            "description": "Webhook removed successfully"
+            "description": "Webhook deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "success",
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Webhook deleted"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/session/{sessionId}/webhook/{webhookId}/logs": {
       "get": {
+        "tags": [
+          "Webhooks"
+        ],
         "summary": "Get webhook logs",
-        "description": "Retrieves logs for the specified webhook.",
+        "description": "Retrieves logs for a specific webhook with pagination and filtering options",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
           },
           {
             "$ref": "#/components/parameters/webhookId"
+          },
+          {
+            "in": "query",
+            "name": "event",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter logs by event type"
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter logs by HTTP status code"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "default": "1"
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "schema": {
+              "type": "string",
+              "default": "100"
+            },
+            "description": "Number of items per page"
+          },
+          {
+            "in": "query",
+            "name": "startDate",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Start date for log filtering (ISO 8601)"
+          },
+          {
+            "in": "query",
+            "name": "endDate",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "End date for log filtering (ISO 8601)"
           }
         ],
         "responses": {
           "200": {
-            "description": "Webhook logs retrieved successfully"
+            "description": "Webhook logs retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "success",
+                        "error"
+                      ]
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "webhookId": {
+                            "type": "string"
+                          },
+                          "webhookDisplayName": {
+                            "type": "string"
+                          },
+                          "event": {
+                            "type": "string",
+                            "description": "Event type",
+                            "example": "inbound-message.upsert"
+                          },
+                          "sessionId": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "response": {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "example": 200,
+                                "description": "HTTP status code of the response"
+                              },
+                              "data": {
+                                "type": "object",
+                                "description": "Response data"
+                              },
+                              "headers": {
+                                "type": "object",
+                                "description": "Response headers"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "page": {
+                      "type": "string"
+                    },
+                    "pageSize": {
+                      "type": "string"
+                    },
+                    "total": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/session/{sessionId}/webhook/{webhookId}/logs/{logId}": {
+    "/session/{sessionId}/group": {
       "get": {
-        "summary": "Get specific webhook log",
-        "description": "Retrieves a specific log entry for the webhook.",
+        "tags": [
+          "Groups"
+        ],
+        "summary": "List groups",
+        "description": "Retrieves a list of groups associated with the session.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/sessionId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Groups retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "success",
+                        "error"
+                      ]
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "The ID of the group",
+                            "example": "120363333119256884@g.us"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "The name of the group",
+                            "example": "My Group"
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "The description of the group",
+                            "example": "This is a group for my friends"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or session not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Create group",
+        "description": "Creates a new group for the session.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/sessionId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGroupSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Group created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "success",
+                        "error"
+                      ]
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "The ID of the group",
+                          "example": "120363333119256884@g.us"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "The name of the group",
+                          "example": "My Group"
+                        },
+                        "description": {
+                          "type": "string",
+                          "description": "The description of the group",
+                          "example": "This is a group for my friends"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/session/{sessionId}/group/{jid}": {
+      "put": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Update group",
+        "description": "Updates group details such as subject, description, and admin settings.",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
           },
           {
-            "$ref": "#/components/parameters/webhookId"
-          },
-          {
-            "$ref": "#/components/parameters/logId"
+            "in": "path",
+            "name": "jid",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group identifier (JID)"
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "subject": {
+                    "type": "string",
+                    "description": "The subject of the group",
+                    "example": "My Group"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "The description of the group",
+                    "example": "This is a group for my friends"
+                  },
+                  "onlyAdminsCanPost": {
+                    "type": "boolean",
+                    "description": "Whether only admins can post in the group"
+                  },
+                  "onlyAdminsCanEditInfo": {
+                    "type": "boolean",
+                    "description": "Whether only admins can edit the group info"
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "Webhook log retrieved successfully"
+            "description": "Group updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or group not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/session/{sessionId}/group/{jid}/send-invite": {
+      "post": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Send group invite",
+        "description": "Sends an invitation to join the specified group.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/sessionId"
+          },
+          {
+            "in": "path",
+            "name": "jid",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group identifier (JID)",
+            "example": "120363333119256884@g.us"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "number": {
+                    "type": "string",
+                    "description": "Phone number of the invitee",
+                    "example": "5519987465779"
+                  },
+                  "message": {
+                    "type": "string",
+                    "description": "Message to send with the invite",
+                    "example": "Join my group!"
+                  }
+                },
+                "required": [
+                  "number",
+                  "message"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Group invite sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/session/{sessionId}/group/{jid}/{action}": {
+      "post": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Perform group actions",
+        "description": "Performs various actions on a WhatsApp group, including participant management and group-level operations.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/sessionId"
+          },
+          {
+            "in": "path",
+            "name": "jid",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group identifier (JID) in the format 'groupid@g.us'"
+          },
+          {
+            "in": "path",
+            "name": "action",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "add",
+                "remove",
+                "promote",
+                "demote",
+                "leave",
+                "invite-code",
+                "invite-code-revoke"
+              ]
+            },
+            "description": "Action to perform: 'add', 'remove', 'promote', 'demote' for participant management; 'leave' to exit the group; 'invite-code' to get the group invite code; 'invite-code-revoke' to generate a new invite code"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "description": "Phone number of a participant in international format (e.g., '1234567890')"
+                    },
+                    "description": "Required for participant actions (add, remove, promote, demote)"
+                  },
+                  {
+                    "type": "object",
+                    "description": "Not required for group actions (leave, invite-code, invite-code-revoke)"
+                  }
+                ]
+              },
+              "examples": {
+                "participantActions": {
+                  "summary": "Example for participant actions",
+                  "value": [
+                    "1234567890",
+                    "9876543210"
+                  ]
+                }
+              }
+            }
+          },
+          "description": "For participant actions (add, remove, promote, demote): Array of phone numbers to perform the action on. Not required for group actions (leave, invite-code, invite-code-revoke)."
+        },
+        "responses": {
+          "200": {
+            "description": "Action performed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "description": "Response for participant actions (add, remove, promote, demote)",
+                      "properties": {
+                        "status": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          },
+                          "description": "Status of the operation for each participant"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "description": "Response for leave action",
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "example": "success"
+                        },
+                        "message": {
+                          "type": "string",
+                          "example": "Left group"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "description": "Response for invite-code action",
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "example": "success"
+                        },
+                        "inviteCode": {
+                          "type": "string",
+                          "example": "AbCdEfGhIjKlMnOp"
+                        },
+                        "inviteUrl": {
+                          "type": "string",
+                          "example": "https://chat.whatsapp.com/AbCdEfGhIjKlMnOp"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "description": "Response for invite-code-revoke action",
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "example": "success"
+                        },
+                        "message": {
+                          "type": "string",
+                          "example": "Invite code revoked"
+                        },
+                        "newInviteCode": {
+                          "type": "string",
+                          "example": "QrStUvWxYzAbCdEf"
+                        },
+                        "newInviteCodeUrl": {
+                          "type": "string",
+                          "example": "https://chat.whatsapp.com/QrStUvWxYzAbCdEf"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "examples": {
+                  "participantActions": {
+                    "summary": "Response for participant actions",
+                    "value": {
+                      "status": {
+                        "1234567890@s.whatsapp.net": "200",
+                        "9876543210@s.whatsapp.net": "404"
+                      }
+                    }
+                  },
+                  "leaveGroup": {
+                    "summary": "Response for leave action",
+                    "value": {
+                      "status": "success",
+                      "message": "Left group"
+                    }
+                  },
+                  "inviteCode": {
+                    "summary": "Response for invite-code action",
+                    "value": {
+                      "status": "success",
+                      "inviteCode": "AbCdEfGhIjKlMnOp",
+                      "inviteUrl": "https://chat.whatsapp.com/AbCdEfGhIjKlMnOp"
+                    }
+                  },
+                  "inviteCodeRevoke": {
+                    "summary": "Response for invite-code-revoke action",
+                    "value": {
+                      "status": "success",
+                      "message": "Invite code revoked",
+                      "newInviteCode": "QrStUvWxYzAbCdEf",
+                      "newInviteCodeUrl": "https://chat.whatsapp.com/QrStUvWxYzAbCdEf"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request, action, or payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "invalidBody": {
+                    "value": {
+                      "status": "failed",
+                      "message": "Invalid body",
+                      "error": "No participants provided"
+                    }
+                  },
+                  "invalidAction": {
+                    "value": {
+                      "status": "failed",
+                      "message": "Invalid action. Must be one of add, remove, promote, demote or leave, invite-code, invite-code-revoke"
+                    }
+                  },
+                  "sessionError": {
+                    "value": {
+                      "status": "failed",
+                      "message": "Session is not connected"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "status": "failed",
+                  "message": "Error updating group participants"
+                }
+              }
+            }
           }
         }
       }
     },
     "/session/{sessionId}/display-picture": {
       "get": {
+        "tags": [
+          "Actions"
+        ],
         "summary": "Get display picture",
-        "description": "Retrieves the current display picture for the session.",
+        "description": "Retrieves the display picture for the WhatsApp session.",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -354,13 +2116,33 @@
         ],
         "responses": {
           "200": {
-            "description": "Display picture retrieved successfully"
+            "description": "Display picture retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       },
       "put": {
+        "tags": [
+          "Actions"
+        ],
         "summary": "Update display picture",
-        "description": "Updates the display picture for the session.",
+        "description": "Updates the display picture for the WhatsApp session.",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -371,22 +2153,42 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DisplayPicture"
+                "$ref": "#/components/schemas/UpdateDisplayPicture"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Display picture updated successfully"
+            "description": "Display picture updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/session/{sessionId}/update-profile-status": {
       "put": {
+        "tags": [
+          "Actions"
+        ],
         "summary": "Update profile status",
-        "description": "Updates the profile status for the session.",
+        "description": "Updates the profile status (about) of the WhatsApp session.",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -397,22 +2199,42 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProfileStatus"
+                "$ref": "#/components/schemas/UpdateProfileStatus"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Profile status updated successfully"
+            "description": "Profile status updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/session/{sessionId}/update-profile-name": {
       "put": {
+        "tags": [
+          "Actions"
+        ],
         "summary": "Update profile name",
-        "description": "Updates the profile name for the session.",
+        "description": "Updates the profile name of the WhatsApp session.",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -423,22 +2245,42 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProfileName"
+                "$ref": "#/components/schemas/UpdateProfileName"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Profile name updated successfully"
+            "description": "Profile name updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/session/{sessionId}/is-on-whatsapp/{jid}": {
       "get": {
-        "summary": "Check WhatsApp presence",
-        "description": "Checks if the specified contact is on WhatsApp.",
+        "tags": [
+          "Actions"
+        ],
+        "summary": "Check WhatsApp availability",
+        "description": "Checks if the given contact JID is registered on WhatsApp.",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -449,13 +2291,33 @@
         ],
         "responses": {
           "200": {
-            "description": "Presence check completed successfully"
+            "description": "WhatsApp availability retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid JID or request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/session/{sessionId}/get-about/{jid}": {
       "get": {
+        "tags": [
+          "Actions"
+        ],
         "summary": "Get contact about info",
         "description": "Retrieves the 'about' information for the specified contact.",
         "parameters": [
@@ -468,13 +2330,33 @@
         ],
         "responses": {
           "200": {
-            "description": "About information retrieved successfully"
+            "description": "About information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid JID or request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/session/{sessionId}/block-contact/{jid}": {
       "put": {
+        "tags": [
+          "Actions"
+        ],
         "summary": "Block contact",
         "description": "Blocks the specified contact by JID.",
         "parameters": [
@@ -487,13 +2369,33 @@
         ],
         "responses": {
           "200": {
-            "description": "Contact blocked successfully"
+            "description": "Contact blocked successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or JID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/session/{sessionId}/unblock-contact/{jid}": {
       "put": {
+        "tags": [
+          "Actions"
+        ],
         "summary": "Unblock contact",
         "description": "Unblocks the specified contact by JID.",
         "parameters": [
@@ -506,132 +2408,35 @@
         ],
         "responses": {
           "200": {
-            "description": "Contact unblocked successfully"
-          }
-        }
-      }
-    },
-    "/session/{sessionId}/group": {
-      "get": {
-        "summary": "List groups",
-        "description": "Retrieves a list of groups for the session.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/sessionId"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Groups retrieved successfully"
-          }
-        }
-      },
-      "post": {
-        "summary": "Create group",
-        "description": "Creates a new group using the specified session.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/sessionId"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateGroupBody"
+            "description": "Contact unblocked successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
               }
             }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Group created successfully"
-          }
-        }
-      }
-    },
-    "/session/{sessionId}/group/{jid}": {
-      "put": {
-        "summary": "Update group",
-        "description": "Updates group details for the specified group JID.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/sessionId"
           },
-          {
-            "$ref": "#/components/parameters/jid"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateGroup"
+          "400": {
+            "description": "Invalid request or JID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Group updated successfully"
-          }
-        }
-      }
-    },
-    "/session/{sessionId}/group/{jid}/send-invite": {
-      "post": {
-        "summary": "Send group invite",
-        "description": "Sends a group invite for the specified group.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/sessionId"
-          },
-          {
-            "$ref": "#/components/parameters/jid"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Group invite sent successfully"
-          }
-        }
-      }
-    },
-    "/session/{sessionId}/group/{jid}/{action}": {
-      "post": {
-        "summary": "Group action",
-        "description": "Performs a specified action on the group.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/sessionId"
-          },
-          {
-            "$ref": "#/components/parameters/jid"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GroupAction"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Group action completed successfully"
           }
         }
       }
     },
     "/session/{sessionId}/privacy": {
       "get": {
+        "tags": [
+          "Privacy"
+        ],
         "summary": "Get privacy settings",
-        "description": "Retrieves the privacy settings for the session.",
+        "description": "Retrieves the current privacy settings for the specified session.",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -639,15 +2444,45 @@
         ],
         "responses": {
           "200": {
-            "description": "Privacy settings retrieved successfully"
+            "description": "Privacy settings retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrivacySettings"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/session/{sessionId}/privacy/last-seen": {
       "put": {
+        "tags": [
+          "Privacy"
+        ],
         "summary": "Update last seen privacy",
-        "description": "Updates the privacy setting for last seen.",
+        "description": "Updates the last seen privacy setting for the session.",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -665,15 +2500,45 @@
         },
         "responses": {
           "200": {
-            "description": "Last seen privacy updated successfully"
+            "description": "Last seen privacy updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/session/{sessionId}/privacy/online": {
       "put": {
+        "tags": [
+          "Privacy"
+        ],
         "summary": "Update online privacy",
-        "description": "Updates the privacy setting for online status.",
+        "description": "Updates the online privacy setting for the session.",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -691,15 +2556,45 @@
         },
         "responses": {
           "200": {
-            "description": "Online privacy updated successfully"
+            "description": "Online privacy updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/session/{sessionId}/privacy/profile-picture": {
       "put": {
+        "tags": [
+          "Privacy"
+        ],
         "summary": "Update profile picture privacy",
-        "description": "Updates the privacy setting for profile picture.",
+        "description": "Updates the privacy setting for the session's profile picture.",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -717,13 +2612,43 @@
         },
         "responses": {
           "200": {
-            "description": "Profile picture privacy updated successfully"
+            "description": "Profile picture privacy updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/session/{sessionId}/privacy/status": {
       "put": {
+        "tags": [
+          "Privacy"
+        ],
         "summary": "Update status privacy",
         "description": "Updates the privacy setting for the session's status.",
         "parameters": [
@@ -743,13 +2668,43 @@
         },
         "responses": {
           "200": {
-            "description": "Status privacy updated successfully"
+            "description": "Status privacy updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/session/{sessionId}/privacy/read-receipts": {
       "put": {
+        "tags": [
+          "Privacy"
+        ],
         "summary": "Update read receipts privacy",
         "description": "Updates the privacy setting for read receipts in the session.",
         "parameters": [
@@ -769,13 +2724,43 @@
         },
         "responses": {
           "200": {
-            "description": "Read receipts privacy updated successfully"
+            "description": "Read receipts privacy updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/session/{sessionId}/privacy/groups-add": {
       "put": {
+        "tags": [
+          "Privacy"
+        ],
         "summary": "Update groups add privacy",
         "description": "Updates the setting that controls who can add the session to groups.",
         "parameters": [
@@ -795,13 +2780,43 @@
         },
         "responses": {
           "200": {
-            "description": "Groups add privacy updated successfully"
+            "description": "Groups add privacy updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/session/{sessionId}/privacy/default-disappearing-mode": {
       "put": {
+        "tags": [
+          "Privacy"
+        ],
         "summary": "Update default disappearing mode",
         "description": "Updates the default disappearing mode for messages in the session.",
         "parameters": [
@@ -821,188 +2836,37 @@
         },
         "responses": {
           "200": {
-            "description": "Default disappearing mode updated successfully"
+            "description": "Default disappearing mode updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
           },
           "400": {
-            "description": "Invalid request or payload"
+            "description": "Invalid request or payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     }
-  },
-  "components": {
-    "parameters": {
-      "sessionId": {
-        "name": "sessionId",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "string"
-        }
-      },
-      "jid": {
-        "name": "jid",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "string"
-        }
-      },
-      "webhookId": {
-        "name": "webhookId",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "string"
-        }
-      },
-      "logId": {
-        "name": "logId",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "string"
-        }
-      }
-    },
-    "schemas": {
-      "MessageResponse": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "ErrorResponse": {
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "string"
-          }
-        }
-      },
-      "TextMessage": {
-        "type": "object",
-        "properties": {
-          "text": {
-            "type": "string"
-          }
-        }
-      },
-      "MediaMessage": {
-        "type": "object",
-        "properties": {
-          "mediaUrl": {
-            "type": "string"
-          }
-        }
-      },
-      "ContactMessage": {
-        "type": "object",
-        "properties": {
-          "contact": {
-            "type": "string"
-          }
-        }
-      },
-      "LocationMessage": {
-        "type": "object",
-        "properties": {
-          "latitude": {
-            "type": "number"
-          },
-          "longitude": {
-            "type": "number"
-          }
-        }
-      },
-      "Webhook": {
-        "type": "object",
-        "properties": {
-          "url": {
-            "type": "string"
-          }
-        }
-      },
-      "DisplayPicture": {
-        "type": "object",
-        "properties": {
-          "image": {
-            "type": "string"
-          }
-        }
-      },
-      "ProfileStatus": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string"
-          }
-        }
-      },
-      "ProfileName": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          }
-        }
-      },
-      "UpdatePrivacyValue": {
-        "type": "object",
-        "required": [
-          "privacy"
-        ],
-        "properties": {
-          "privacy": {
-            "type": "string"
-          }
-        }
-      },
-      "UpdateDefaultDisappearingMode": {
-        "type": "object",
-        "required": [
-          "mode"
-        ],
-        "properties": {
-          "mode": {
-            "type": "string"
-          }
-        }
-      },
-      "CreateGroupBody": {
-        "type": "object",
-        "properties": {
-          "groupName": {
-            "type": "string"
-          }
-        }
-      },
-      "UpdateGroup": {
-        "type": "object",
-        "properties": {
-          "groupName": {
-            "type": "string"
-          }
-        }
-      },
-      "GroupAction": {
-        "type": "object",
-        "properties": {
-          "action": {
-            "type": "string"
-          }
-        }
-      }
-    }
-  },
-  "security": [
-    {
-      "bearerAuth": []
-    }
-  ]
+  }
 }
