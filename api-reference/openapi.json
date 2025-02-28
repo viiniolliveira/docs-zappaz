@@ -85,10 +85,7 @@
       },
       "TextMessage": {
         "type": "object",
-        "required": [
-          "number",
-          "message"
-        ],
+        "required": ["number", "message"],
         "properties": {
           "number": {
             "type": "string",
@@ -106,10 +103,7 @@
               "type": "string"
             },
             "description": "(Optional) An array of JIDs or phone numbers to mention in the message",
-            "example": [
-              "5511999999999",
-              "5511999999999@s.whatsapp.net"
-            ]
+            "example": ["5511999999999", "5511999999999@s.whatsapp.net"]
           },
           "quoted": {
             "type": "string",
@@ -130,10 +124,7 @@
       },
       "ImageMessage": {
         "type": "object",
-        "required": [
-          "number",
-          "source"
-        ],
+        "required": ["number", "source"],
         "properties": {
           "number": {
             "type": "string",
@@ -161,10 +152,7 @@
               "type": "string"
             },
             "description": "(Optional) An array of JIDs or phone numbers to mention in the caption",
-            "example": [
-              "5511999999999",
-              "5511999999999@s.whatsapp.net"
-            ]
+            "example": ["5511999999999", "5511999999999@s.whatsapp.net"]
           },
           "quoted": {
             "type": "string",
@@ -180,10 +168,7 @@
       },
       "VideoMessage": {
         "type": "object",
-        "required": [
-          "number",
-          "source"
-        ],
+        "required": ["number", "source"],
         "properties": {
           "number": {
             "type": "string",
@@ -216,10 +201,7 @@
               "type": "string"
             },
             "description": "(Optional) An array of JIDs or phone numbers to mention in the caption",
-            "example": [
-              "5511999999999",
-              "5511999999999@s.whatsapp.net"
-            ]
+            "example": ["5511999999999", "5511999999999@s.whatsapp.net"]
           },
           "quoted": {
             "type": "string",
@@ -235,10 +217,7 @@
       },
       "AudioMessage": {
         "type": "object",
-        "required": [
-          "number",
-          "source"
-        ],
+        "required": ["number", "source"],
         "properties": {
           "number": {
             "type": "string",
@@ -250,21 +229,13 @@
             "description": "URL to an audio file or raw base64 encoded audio data (without any data URI scheme prefix like 'data:audio/mp3;base64,')",
             "example": "https://example.com/audio.mp3"
           },
-          "caption": {
-            "type": "string",
-            "description": "(Optional) Caption for the audio",
-            "example": "Check out this audio!"
-          },
           "mentions": {
             "type": "array",
             "items": {
               "type": "string"
             },
             "description": "(Optional) An array of JIDs or phone numbers to mention in the caption",
-            "example": [
-              "5511999999999",
-              "5511999999999@s.whatsapp.net"
-            ]
+            "example": ["5511999999999", "5511999999999@s.whatsapp.net"]
           },
           "quoted": {
             "type": "string",
@@ -280,10 +251,7 @@
       },
       "DocumentMessage": {
         "type": "object",
-        "required": [
-          "number",
-          "source"
-        ],
+        "required": ["number", "source"],
         "properties": {
           "number": {
             "type": "string",
@@ -311,10 +279,7 @@
               "type": "string"
             },
             "description": "(Optional) An array of JIDs or phone numbers to mention in the caption",
-            "example": [
-              "5511999999999",
-              "5511999999999@s.whatsapp.net"
-            ]
+            "example": ["5511999999999", "5511999999999@s.whatsapp.net"]
           },
           "quoted": {
             "type": "string",
@@ -355,9 +320,7 @@
                 "example": "Doe"
               }
             },
-            "required": [
-              "phoneNumber"
-            ]
+            "required": ["phoneNumber"]
           },
           "delay": {
             "type": "number",
@@ -365,10 +328,7 @@
             "example": 2000
           }
         },
-        "required": [
-          "number",
-          "contact"
-        ]
+        "required": ["number", "contact"]
       },
       "LocationMessage": {
         "type": "object",
@@ -399,19 +359,14 @@
             "example": "Casa do João"
           }
         },
-        "required": [
-          "number"
-        ]
+        "required": ["number"]
       },
       "MessageResponse": {
         "type": "object",
         "properties": {
           "status": {
             "type": "string",
-            "enum": [
-              "success",
-              "failed"
-            ]
+            "enum": ["success", "failed"]
           },
           "data": {
             "type": "object"
@@ -423,9 +378,7 @@
         "properties": {
           "status": {
             "type": "string",
-            "enum": [
-              "failed"
-            ]
+            "enum": ["failed"]
           },
           "message": {
             "type": "string"
@@ -437,10 +390,7 @@
         "properties": {
           "status": {
             "type": "string",
-            "enum": [
-              "success",
-              "error"
-            ]
+            "enum": ["success", "error"]
           },
           "data": {
             "$ref": "#/components/schemas/WebhookData"
@@ -493,10 +443,7 @@
         "properties": {
           "status": {
             "type": "string",
-            "enum": [
-              "success",
-              "error"
-            ]
+            "enum": ["success", "error"]
           },
           "data": {
             "type": "array",
@@ -653,9 +600,7 @@
       },
       "CreateGroupSchema": {
         "type": "object",
-        "required": [
-          "name"
-        ],
+        "required": ["name"],
         "properties": {
           "name": {
             "type": "string",
@@ -671,10 +616,7 @@
       },
       "UpdateDisplayPicture": {
         "type": "object",
-        "required": [
-          "identifier",
-          "source"
-        ],
+        "required": ["identifier", "source"],
         "properties": {
           "identifier": {
             "type": "string",
@@ -688,9 +630,7 @@
       },
       "UpdateProfileStatus": {
         "type": "object",
-        "required": [
-          "status"
-        ],
+        "required": ["status"],
         "properties": {
           "status": {
             "type": "string",
@@ -700,9 +640,7 @@
       },
       "UpdateProfileName": {
         "type": "object",
-        "required": [
-          "name"
-        ],
+        "required": ["name"],
         "properties": {
           "name": {
             "type": "string",
@@ -741,9 +679,7 @@
       },
       "UpdatePrivacyValue": {
         "type": "object",
-        "required": [
-          "privacy"
-        ],
+        "required": ["privacy"],
         "properties": {
           "privacy": {
             "type": "string",
@@ -753,15 +689,22 @@
       },
       "UpdateDefaultDisappearingMode": {
         "type": "object",
-        "required": [
-          "mode"
-        ],
+        "required": ["mode"],
         "properties": {
           "mode": {
             "type": "string",
             "description": "Default disappearing mode (e.g., '24h', '7d', 'custom')"
           }
         }
+      },
+      "GroupParticipantsArray": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "description": "Phone number of a participant in international format without the '+' sign (e.g., '5511999999999')"
+        },
+        "description": "Array of phone numbers representing WhatsApp group participants",
+        "example": ["5511999999999", "5522888888888"]
       }
     }
   },
@@ -800,9 +743,7 @@
         }
       ],
       "post": {
-        "tags": [
-          "Messages"
-        ],
+        "tags": ["Messages"],
         "summary": "Send text message",
         "description": "Sends a text message to a specified WhatsApp number.",
         "requestBody": {
@@ -856,9 +797,7 @@
         }
       ],
       "post": {
-        "tags": [
-          "Messages"
-        ],
+        "tags": ["Messages"],
         "summary": "Send image message",
         "description": "Sends an image message to a specified WhatsApp number. The 'source' parameter can be either a URL to an image or a raw base64 encoded string of the image data (without any data URI scheme prefix).",
         "requestBody": {
@@ -912,9 +851,7 @@
         }
       ],
       "post": {
-        "tags": [
-          "Messages"
-        ],
+        "tags": ["Messages"],
         "summary": "Send video message",
         "description": "Sends a video message to a specified WhatsApp number. The 'source' parameter can be either a URL to a video file or a raw base64 encoded string of the video data (without any data URI scheme prefix).",
         "requestBody": {
@@ -968,9 +905,7 @@
         }
       ],
       "post": {
-        "tags": [
-          "Messages"
-        ],
+        "tags": ["Messages"],
         "summary": "Send audio message",
         "description": "Sends an audio message to a specified WhatsApp number. The 'source' parameter can be either a URL to an audio file or a raw base64 encoded string of the audio data (without any data URI scheme prefix).",
         "requestBody": {
@@ -1024,9 +959,7 @@
         }
       ],
       "post": {
-        "tags": [
-          "Messages"
-        ],
+        "tags": ["Messages"],
         "summary": "Send document message",
         "description": "Sends a document message to a specified WhatsApp number. The 'source' parameter can be either a URL to a document file or a raw base64 encoded string of the document data (without any data URI scheme prefix).",
         "requestBody": {
@@ -1080,9 +1013,7 @@
         }
       ],
       "post": {
-        "tags": [
-          "Messages"
-        ],
+        "tags": ["Messages"],
         "summary": "Send contact message",
         "description": "Sends a contact message to a specified WhatsApp number.",
         "requestBody": {
@@ -1136,9 +1067,7 @@
         }
       ],
       "post": {
-        "tags": [
-          "Messages"
-        ],
+        "tags": ["Messages"],
         "summary": "Send location message",
         "description": "Sends a location message to a specified WhatsApp number. At least one of either address or coordinates is required. When both are provided, coordinates take precedence. When latitude and longitude are not provided, we try to look up the address for you.",
         "requestBody": {
@@ -1192,9 +1121,7 @@
         }
       ],
       "get": {
-        "tags": [
-          "Webhooks"
-        ],
+        "tags": ["Webhooks"],
         "summary": "Get webhooks",
         "description": "Retrieves all webhooks for the specified session",
         "responses": {
@@ -1211,9 +1138,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Webhooks"
-        ],
+        "tags": ["Webhooks"],
         "summary": "Create webhook",
         "description": "Creates a new webhook for the specified session",
         "requestBody": {
@@ -1280,9 +1205,7 @@
         }
       ],
       "put": {
-        "tags": [
-          "Webhooks"
-        ],
+        "tags": ["Webhooks"],
         "summary": "Update webhook",
         "description": "Updates an existing webhook for the specified session",
         "requestBody": {
@@ -1364,9 +1287,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Webhooks"
-        ],
+        "tags": ["Webhooks"],
         "summary": "Delete webhook",
         "description": "Deletes an existing webhook for the specified session",
         "parameters": [
@@ -1387,10 +1308,7 @@
                   "properties": {
                     "status": {
                       "type": "string",
-                      "enum": [
-                        "success",
-                        "error"
-                      ]
+                      "enum": ["success", "error"]
                     },
                     "message": {
                       "type": "string",
@@ -1416,9 +1334,7 @@
     },
     "/session/{sessionId}/webhook/{webhookId}/logs": {
       "get": {
-        "tags": [
-          "Webhooks"
-        ],
+        "tags": ["Webhooks"],
         "summary": "Get webhook logs",
         "description": "Retrieves logs for a specific webhook with pagination and filtering options",
         "parameters": [
@@ -1491,10 +1407,7 @@
                   "properties": {
                     "status": {
                       "type": "string",
-                      "enum": [
-                        "success",
-                        "error"
-                      ]
+                      "enum": ["success", "error"]
                     },
                     "data": {
                       "type": "array",
@@ -1582,9 +1495,7 @@
     },
     "/session/{sessionId}/group": {
       "get": {
-        "tags": [
-          "Groups"
-        ],
+        "tags": ["Groups"],
         "summary": "List groups",
         "description": "Retrieves a list of groups associated with the session.",
         "parameters": [
@@ -1602,10 +1513,7 @@
                   "properties": {
                     "status": {
                       "type": "string",
-                      "enum": [
-                        "success",
-                        "error"
-                      ]
+                      "enum": ["success", "error"]
                     },
                     "data": {
                       "type": "array",
@@ -1648,9 +1556,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Groups"
-        ],
+        "tags": ["Groups"],
         "summary": "Create group",
         "description": "Creates a new group for the session.",
         "parameters": [
@@ -1678,10 +1584,7 @@
                   "properties": {
                     "status": {
                       "type": "string",
-                      "enum": [
-                        "success",
-                        "error"
-                      ]
+                      "enum": ["success", "error"]
                     },
                     "data": {
                       "type": "object",
@@ -1723,9 +1626,7 @@
     },
     "/session/{sessionId}/group/{jid}": {
       "put": {
-        "tags": [
-          "Groups"
-        ],
+        "tags": ["Groups"],
         "summary": "Update group",
         "description": "Updates group details such as subject, description, and admin settings.",
         "parameters": [
@@ -1798,9 +1699,7 @@
     },
     "/session/{sessionId}/group/{jid}/send-invite": {
       "post": {
-        "tags": [
-          "Groups"
-        ],
+        "tags": ["Groups"],
         "summary": "Send group invite",
         "description": "Sends an invitation to join the specified group.",
         "parameters": [
@@ -1836,10 +1735,7 @@
                     "example": "Join my group!"
                   }
                 },
-                "required": [
-                  "number",
-                  "message"
-                ]
+                "required": ["number", "message"]
               }
             }
           }
@@ -1868,13 +1764,11 @@
         }
       }
     },
-    "/session/{sessionId}/group/{jid}/{action}": {
+    "/session/{sessionId}/group/{jid}/add": {
       "post": {
-        "tags": [
-          "Groups"
-        ],
-        "summary": "Perform group actions",
-        "description": "Performs various actions on a WhatsApp group, including participant management and group-level operations.",
+        "tags": ["Groups"],
+        "summary": "Add participants",
+        "description": "Adds participants to a WhatsApp group.",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -1887,167 +1781,33 @@
               "type": "string"
             },
             "description": "Group identifier (JID) in the format 'groupid@g.us'"
-          },
-          {
-            "in": "path",
-            "name": "action",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "add",
-                "remove",
-                "promote",
-                "demote",
-                "leave",
-                "invite-code",
-                "invite-code-revoke"
-              ]
-            },
-            "description": "Action to perform: 'add', 'remove', 'promote', 'demote' for participant management; 'leave' to exit the group; 'invite-code' to get the group invite code; 'invite-code-revoke' to generate a new invite code"
           }
         ],
         "requestBody": {
-          "required": false,
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "oneOf": [
-                  {
-                    "type": "array",
-                    "items": {
-                      "type": "string",
-                      "description": "Phone number of a participant in international format (e.g., '1234567890')"
-                    },
-                    "description": "Required for participant actions (add, remove, promote, demote)"
-                  },
-                  {
-                    "type": "object",
-                    "description": "Not required for group actions (leave, invite-code, invite-code-revoke)"
-                  }
-                ]
-              },
-              "examples": {
-                "participantActions": {
-                  "summary": "Example for participant actions",
-                  "value": [
-                    "1234567890",
-                    "9876543210"
-                  ]
-                }
+                "$ref": "#/components/schemas/GroupParticipantsArray"
               }
             }
           },
-          "description": "For participant actions (add, remove, promote, demote): Array of phone numbers to perform the action on. Not required for group actions (leave, invite-code, invite-code-revoke)."
+          "description": "Array of phone numbers to add to the group."
         },
         "responses": {
           "200": {
-            "description": "Action performed successfully",
+            "description": "Participants added successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    {
+                  "type": "object",
+                  "properties": {
+                    "status": {
                       "type": "object",
-                      "description": "Response for participant actions (add, remove, promote, demote)",
-                      "properties": {
-                        "status": {
-                          "type": "object",
-                          "additionalProperties": {
-                            "type": "string"
-                          },
-                          "description": "Status of the operation for each participant"
-                        }
-                      }
-                    },
-                    {
-                      "type": "object",
-                      "description": "Response for leave action",
-                      "properties": {
-                        "status": {
-                          "type": "string",
-                          "example": "success"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "Left group"
-                        }
-                      }
-                    },
-                    {
-                      "type": "object",
-                      "description": "Response for invite-code action",
-                      "properties": {
-                        "status": {
-                          "type": "string",
-                          "example": "success"
-                        },
-                        "inviteCode": {
-                          "type": "string",
-                          "example": "AbCdEfGhIjKlMnOp"
-                        },
-                        "inviteUrl": {
-                          "type": "string",
-                          "example": "https://chat.whatsapp.com/AbCdEfGhIjKlMnOp"
-                        }
-                      }
-                    },
-                    {
-                      "type": "object",
-                      "description": "Response for invite-code-revoke action",
-                      "properties": {
-                        "status": {
-                          "type": "string",
-                          "example": "success"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "Invite code revoked"
-                        },
-                        "newInviteCode": {
-                          "type": "string",
-                          "example": "QrStUvWxYzAbCdEf"
-                        },
-                        "newInviteCodeUrl": {
-                          "type": "string",
-                          "example": "https://chat.whatsapp.com/QrStUvWxYzAbCdEf"
-                        }
-                      }
-                    }
-                  ]
-                },
-                "examples": {
-                  "participantActions": {
-                    "summary": "Response for participant actions",
-                    "value": {
-                      "status": {
-                        "1234567890@s.whatsapp.net": "200",
-                        "9876543210@s.whatsapp.net": "404"
-                      }
-                    }
-                  },
-                  "leaveGroup": {
-                    "summary": "Response for leave action",
-                    "value": {
-                      "status": "success",
-                      "message": "Left group"
-                    }
-                  },
-                  "inviteCode": {
-                    "summary": "Response for invite-code action",
-                    "value": {
-                      "status": "success",
-                      "inviteCode": "AbCdEfGhIjKlMnOp",
-                      "inviteUrl": "https://chat.whatsapp.com/AbCdEfGhIjKlMnOp"
-                    }
-                  },
-                  "inviteCodeRevoke": {
-                    "summary": "Response for invite-code-revoke action",
-                    "value": {
-                      "status": "success",
-                      "message": "Invite code revoked",
-                      "newInviteCode": "QrStUvWxYzAbCdEf",
-                      "newInviteCodeUrl": "https://chat.whatsapp.com/QrStUvWxYzAbCdEf"
+                      "additionalProperties": {
+                        "type": "string"
+                      },
+                      "description": "Status of the operation for each participant"
                     }
                   }
                 }
@@ -2055,46 +1815,371 @@
             }
           },
           "400": {
-            "description": "Invalid request, action, or payload",
+            "description": "Invalid request or payload",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "examples": {
-                  "invalidBody": {
-                    "value": {
-                      "status": "failed",
-                      "message": "Invalid body",
-                      "error": "No participants provided"
-                    }
-                  },
-                  "invalidAction": {
-                    "value": {
-                      "status": "failed",
-                      "message": "Invalid action. Must be one of add, remove, promote, demote or leave, invite-code, invite-code-revoke"
-                    }
-                  },
-                  "sessionError": {
-                    "value": {
-                      "status": "failed",
-                      "message": "Session is not connected"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/session/{sessionId}/group/{jid}/remove": {
+      "post": {
+        "tags": ["Groups"],
+        "summary": "Remove participants",
+        "description": "Removes participants from a WhatsApp group.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/sessionId"
+          },
+          {
+            "in": "path",
+            "name": "jid",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group identifier (JID) in the format 'groupid@g.us'"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroupParticipantsArray"
+              }
+            }
+          },
+          "description": "Array of phone numbers to remove from the group."
+        },
+        "responses": {
+          "200": {
+            "description": "Participants removed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      },
+                      "description": "Status of the operation for each participant"
                     }
                   }
                 }
               }
             }
           },
-          "500": {
-            "description": "Server error",
+          "400": {
+            "description": "Invalid request or payload",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "status": "failed",
-                  "message": "Error updating group participants"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/session/{sessionId}/group/{jid}/promote": {
+      "post": {
+        "tags": ["Groups"],
+        "summary": "Promote",
+        "description": "Promotes participants to admin status in a WhatsApp group.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/sessionId"
+          },
+          {
+            "in": "path",
+            "name": "jid",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group identifier (JID) in the format 'groupid@g.us'"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroupParticipantsArray"
+              }
+            }
+          },
+          "description": "Array of phone numbers to promote to admin."
+        },
+        "responses": {
+          "200": {
+            "description": "Participants promoted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      },
+                      "description": "Status of the operation for each participant"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/session/{sessionId}/group/{jid}/demote": {
+      "post": {
+        "tags": ["Groups"],
+        "summary": "Demote",
+        "description": "Demotes admins to regular participants in a WhatsApp group.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/sessionId"
+          },
+          {
+            "in": "path",
+            "name": "jid",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group identifier (JID) in the format 'groupid@g.us'"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroupParticipantsArray"
+              }
+            }
+          },
+          "description": "Array of phone numbers to demote from admin."
+        },
+        "responses": {
+          "200": {
+            "description": "Admins demoted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      },
+                      "description": "Status of the operation for each participant"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/session/{sessionId}/group/{jid}/invite-code": {
+      "post": {
+        "tags": ["Groups"],
+        "summary": "Get group invite code",
+        "description": "Retrieves the invite code for a WhatsApp group.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/sessionId"
+          },
+          {
+            "in": "path",
+            "name": "jid",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group identifier (JID) in the format 'groupid@g.us'"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invite code retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "inviteCode": {
+                      "type": "string",
+                      "example": "AbCdEfGhIjKlMnOp"
+                    },
+                    "inviteUrl": {
+                      "type": "string",
+                      "example": "https://chat.whatsapp.com/AbCdEfGhIjKlMnOp"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or group not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/session/{sessionId}/group/{jid}/invite-code-revoke": {
+      "post": {
+        "tags": ["Groups"],
+        "summary": "Revoke group invite code",
+        "description": "Revokes the current invite code and generates a new one for a WhatsApp group.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/sessionId"
+          },
+          {
+            "in": "path",
+            "name": "jid",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group identifier (JID) in the format 'groupid@g.us'"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invite code revoked successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invite code revoked"
+                    },
+                    "newInviteCode": {
+                      "type": "string",
+                      "example": "QrStUvWxYzAbCdEf"
+                    },
+                    "newInviteCodeUrl": {
+                      "type": "string",
+                      "example": "https://chat.whatsapp.com/QrStUvWxYzAbCdEf"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or group not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/session/{sessionId}/group/{jid}/leave": {
+      "post": {
+        "tags": ["Groups"],
+        "summary": "Leave group",
+        "description": "Leaves a WhatsApp group.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/sessionId"
+          },
+          {
+            "in": "path",
+            "name": "jid",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Group identifier (JID) in the format 'groupid@g.us'"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Left group successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Left group"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or group not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -2104,9 +2189,7 @@
     },
     "/session/{sessionId}/display-picture": {
       "get": {
-        "tags": [
-          "Actions"
-        ],
+        "tags": ["Actions"],
         "summary": "Get display picture",
         "description": "Retrieves the display picture for the WhatsApp session.",
         "parameters": [
@@ -2138,9 +2221,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Actions"
-        ],
+        "tags": ["Actions"],
         "summary": "Update display picture",
         "description": "Updates the display picture for the WhatsApp session.",
         "parameters": [
@@ -2184,9 +2265,7 @@
     },
     "/session/{sessionId}/update-profile-status": {
       "put": {
-        "tags": [
-          "Actions"
-        ],
+        "tags": ["Actions"],
         "summary": "Update profile status",
         "description": "Updates the profile status (about) of the WhatsApp session.",
         "parameters": [
@@ -2230,9 +2309,7 @@
     },
     "/session/{sessionId}/update-profile-name": {
       "put": {
-        "tags": [
-          "Actions"
-        ],
+        "tags": ["Actions"],
         "summary": "Update profile name",
         "description": "Updates the profile name of the WhatsApp session.",
         "parameters": [
@@ -2276,9 +2353,7 @@
     },
     "/session/{sessionId}/is-on-whatsapp/{jid}": {
       "get": {
-        "tags": [
-          "Actions"
-        ],
+        "tags": ["Actions"],
         "summary": "Check WhatsApp availability",
         "description": "Checks if the given contact JID is registered on WhatsApp.",
         "parameters": [
@@ -2315,9 +2390,7 @@
     },
     "/session/{sessionId}/get-about/{jid}": {
       "get": {
-        "tags": [
-          "Actions"
-        ],
+        "tags": ["Actions"],
         "summary": "Get contact about info",
         "description": "Retrieves the 'about' information for the specified contact.",
         "parameters": [
@@ -2354,9 +2427,7 @@
     },
     "/session/{sessionId}/block-contact/{jid}": {
       "put": {
-        "tags": [
-          "Actions"
-        ],
+        "tags": ["Actions"],
         "summary": "Block contact",
         "description": "Blocks the specified contact by JID.",
         "parameters": [
@@ -2393,9 +2464,7 @@
     },
     "/session/{sessionId}/unblock-contact/{jid}": {
       "put": {
-        "tags": [
-          "Actions"
-        ],
+        "tags": ["Actions"],
         "summary": "Unblock contact",
         "description": "Unblocks the specified contact by JID.",
         "parameters": [
@@ -2432,9 +2501,7 @@
     },
     "/session/{sessionId}/privacy": {
       "get": {
-        "tags": [
-          "Privacy"
-        ],
+        "tags": ["Privacy"],
         "summary": "Get privacy settings",
         "description": "Retrieves the current privacy settings for the specified session.",
         "parameters": [
@@ -2478,9 +2545,7 @@
     },
     "/session/{sessionId}/privacy/last-seen": {
       "put": {
-        "tags": [
-          "Privacy"
-        ],
+        "tags": ["Privacy"],
         "summary": "Update last seen privacy",
         "description": "Updates the last seen privacy setting for the session.",
         "parameters": [
@@ -2534,9 +2599,7 @@
     },
     "/session/{sessionId}/privacy/online": {
       "put": {
-        "tags": [
-          "Privacy"
-        ],
+        "tags": ["Privacy"],
         "summary": "Update online privacy",
         "description": "Updates the online privacy setting for the session.",
         "parameters": [
@@ -2590,9 +2653,7 @@
     },
     "/session/{sessionId}/privacy/profile-picture": {
       "put": {
-        "tags": [
-          "Privacy"
-        ],
+        "tags": ["Privacy"],
         "summary": "Update profile picture privacy",
         "description": "Updates the privacy setting for the session's profile picture.",
         "parameters": [
@@ -2646,9 +2707,7 @@
     },
     "/session/{sessionId}/privacy/status": {
       "put": {
-        "tags": [
-          "Privacy"
-        ],
+        "tags": ["Privacy"],
         "summary": "Update status privacy",
         "description": "Updates the privacy setting for the session's status.",
         "parameters": [
@@ -2702,9 +2761,7 @@
     },
     "/session/{sessionId}/privacy/read-receipts": {
       "put": {
-        "tags": [
-          "Privacy"
-        ],
+        "tags": ["Privacy"],
         "summary": "Update read receipts privacy",
         "description": "Updates the privacy setting for read receipts in the session.",
         "parameters": [
@@ -2758,9 +2815,7 @@
     },
     "/session/{sessionId}/privacy/groups-add": {
       "put": {
-        "tags": [
-          "Privacy"
-        ],
+        "tags": ["Privacy"],
         "summary": "Update groups add privacy",
         "description": "Updates the setting that controls who can add the session to groups.",
         "parameters": [
@@ -2814,9 +2869,7 @@
     },
     "/session/{sessionId}/privacy/default-disappearing-mode": {
       "put": {
-        "tags": [
-          "Privacy"
-        ],
+        "tags": ["Privacy"],
         "summary": "Update default disappearing mode",
         "description": "Updates the default disappearing mode for messages in the session.",
         "parameters": [
