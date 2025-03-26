@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://dev.zappazapi.com/api/v1",
+      "url": "https://dev.zappaz.io/api/v1",
       "description": "Development API Server"
     }
   ],
@@ -620,11 +620,13 @@
         "properties": {
           "identifier": {
             "type": "string",
-            "description": "Identifier for display picture update."
+            "description": "The phone number or group id of the contact or group to update the display picture for.",
+            "example": "120363333119256884@g.us"
           },
           "source": {
             "type": "string",
-            "description": "URL or base64 encoded string for the new display picture."
+            "description": "URL or base64 encoded string for the new display picture.",
+            "example": "https://example.com/image.jpg"
           }
         }
       },
@@ -2195,6 +2197,15 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
+          },
+          {
+            "in": "query",
+            "name": "identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The phone number or group id of the contact or group to get the display picture for."
           }
         ],
         "responses": {
@@ -2354,7 +2365,7 @@
     "/session/{sessionId}/is-on-whatsapp/{jid}": {
       "get": {
         "tags": ["Actions"],
-        "summary": "Check WhatsApp availability",
+        "summary": "Is contact is on wpp",
         "description": "Checks if the given contact JID is registered on WhatsApp.",
         "parameters": [
           {
