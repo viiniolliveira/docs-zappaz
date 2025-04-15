@@ -2,13 +2,13 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Zappaz API",
-    "description": "API for sending messages and managing webhooks",
+    "description": "API para envio de mensagens e gerenciamento de webhooks",
     "version": "1.0.0"
   },
   "servers": [
     {
       "url": "https://dev.zappaz.io/api/v1",
-      "description": "Development API Server"
+      "description": "Servidor de API de Desenvolvimento"
     }
   ],
   "components": {
@@ -17,7 +17,7 @@
         "type": "apiKey",
         "in": "header",
         "name": "Authorization",
-        "description": "User or Session token, directly passed as a string in the 'Authorization' header. The user token has scope over all sessions owned by the user. The session token is limited to the session itself."
+        "description": "Token de usuário ou sessão, passado diretamente como uma string no cabeçalho 'Authorization'. O token de usuário tem escopo sobre todas as sessões pertencentes ao usuário. O token de sessão é limitado à própria sessão."
       }
     },
     "parameters": {
@@ -28,7 +28,7 @@
         "schema": {
           "type": "string"
         },
-        "description": "Unique identifier for the session"
+        "description": "Identificador único da sessão"
       },
       "webhookId": {
         "in": "path",
@@ -37,7 +37,7 @@
         "schema": {
           "type": "string"
         },
-        "description": "Unique identifier for the webhook"
+        "description": "Identificador único do webhook"
       },
       "jid": {
         "in": "path",
@@ -46,7 +46,7 @@
         "schema": {
           "type": "string"
         },
-        "description": "WhatsApp JID of the contact"
+        "description": "JID do WhatsApp do contato"
       }
     },
     "schemas": {
@@ -55,31 +55,31 @@
         "properties": {
           "messageOnCall": {
             "type": "string",
-            "description": "A message to be sent when a call is received. When messageOnCall is set, the call incoming call will be rejected and the message will be sent to the caller."
+            "description": "Uma mensagem a ser enviada quando uma chamada é recebida. Quando messageOnCall é definido, a chamada recebida será rejeitada e a mensagem será enviada para o chamador"
           },
           "rejectCalls": {
             "type": "boolean",
             "default": false,
-            "description": "Whether to reject incoming calls"
+            "description": "Se deve rejeitar chamadas recebidas"
           },
           "ignoreGroups": {
             "type": "boolean",
             "default": false,
-            "description": "Whether to ignore groups"
+            "description": "Se deve ignorar grupos"
           },
           "syncFullHistory": {
             "type": "boolean",
             "default": false,
-            "description": "Whether to sync a chat's full history"
+            "description": "Se deve sincronizar o histórico completo de um chat"
           },
           "markOnlineOnConnect": {
             "type": "boolean",
             "default": false,
-            "description": "When set to true, as soon as a session is connected, contacts will always see the user as online."
+            "description": "Quando definido como true, assim que uma sessão é conectada, os contatos sempre verão o usuário como online"
           },
           "clientConnectionName": {
             "type": "string",
-            "description": "The name of the client connection. This name is shown on the list of connected clients."
+            "description": "O nome da conexão do cliente. Este nome é mostrado na lista de clientes conectados"
           }
         }
       },
@@ -89,12 +89,12 @@
         "properties": {
           "number": {
             "type": "string",
-            "description": "WhatsApp number to send the message to",
+            "description": "Número do WhatsApp para enviar a mensagem",
             "example": "5511999999999"
           },
           "message": {
             "type": "string",
-            "description": "Message to send",
+            "description": "Mensagem a ser enviada",
             "example": "Hello, how are you?"
           },
           "mentions": {
@@ -102,23 +102,23 @@
             "items": {
               "type": "string"
             },
-            "description": "(Optional) An array of JIDs or phone numbers to mention in the message",
+            "description": "(Opcional) Um array de JIDs ou números de telefone para mencionar na mensagem",
             "example": ["5511999999999", "5511999999999@s.whatsapp.net"]
           },
           "quoted": {
             "type": "string",
-            "description": "(Optional) Message ID of the message to quote",
+            "description": "(Opcional) ID da mensagem para citar",
             "example": "3EB0B5EED74106A7F4EC06"
           },
           "delay": {
             "type": "number",
-            "description": "(Optional) Delay in seconds before sending the message (typing...)",
+            "description": "(Opcional) Atraso em segundos antes de enviar a mensagem (digitando...)",
             "example": 2000
           },
           "linkPreview": {
             "type": "boolean",
             "default": true,
-            "description": "(Optional) Whether to include a link preview when a message contains a link"
+            "description": "(Opcional) Se deve incluir uma prévia do link quando uma mensagem contém um link"
           }
         }
       },
@@ -128,22 +128,22 @@
         "properties": {
           "number": {
             "type": "string",
-            "description": "WhatsApp number to send the message to",
+            "description": "Número do WhatsApp para enviar a mensagem",
             "example": "5511999999999"
           },
           "source": {
             "type": "string",
-            "description": "URL to an image or raw base64 encoded image data (without any data URI scheme prefix like 'data:image/jpeg;base64,')",
+            "description": "URL para uma imagem ou dados da imagem codificados em base64 (sem qualquer prefixo do esquema URI de dados como 'data:image/jpeg;base64,')",
             "example": "https://example.com/image.jpg"
           },
           "fileName": {
             "type": "string",
-            "description": "(Optional) Custom filename for the image",
+            "description": "(Opcional) Nome personalizado para o arquivo da imagem",
             "example": "my-image.jpg"
           },
           "caption": {
             "type": "string",
-            "description": "(Optional) Caption for the image",
+            "description": "(Opcional) Legenda para a imagem",
             "example": "Check out this image!"
           },
           "mentions": {
@@ -172,45 +172,45 @@
         "properties": {
           "number": {
             "type": "string",
-            "description": "WhatsApp number to send the message to",
+            "description": "Número do WhatsApp para enviar a mensagem",
             "example": "5511999999999"
           },
           "source": {
             "type": "string",
-            "description": "URL to a video file or raw base64 encoded video data (without any data URI scheme prefix like 'data:video/mp4;base64,')",
+            "description": "URL para um arquivo de vídeo ou dados do vídeo codificados em base64 (sem qualquer prefixo do esquema URI de dados como 'data:video/mp4;base64,')",
             "example": "https://example.com/video.mp4"
           },
           "fileName": {
             "type": "string",
-            "description": "(Optional) Custom filename for the video",
+            "description": "(Opcional) Nome personalizado para o arquivo do vídeo",
             "example": "my-video.mp4"
           },
           "caption": {
             "type": "string",
-            "description": "(Optional) Caption for the video",
+            "description": "(Opcional) Legenda para o vídeo",
             "example": "Check out this video!"
           },
           "gifPlayback": {
             "type": "boolean",
             "default": false,
-            "description": "(Optional) Whether to send the video as a GIF"
+            "description": "(Opcional) Se deve enviar o vídeo como GIF"
           },
           "mentions": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "(Optional) An array of JIDs or phone numbers to mention in the caption",
+            "description": "(Opcional) Um array de JIDs ou números de telefone para mencionar na legenda",
             "example": ["5511999999999", "5511999999999@s.whatsapp.net"]
           },
           "quoted": {
             "type": "string",
-            "description": "(Optional) Message ID of the message to quote",
+            "description": "(Opcional) ID da mensagem para citar",
             "example": "3EB0B5EED74106A7F4EC06"
           },
           "delay": {
             "type": "number",
-            "description": "(Optional) Delay in seconds before sending the message",
+            "description": "(Opcional) Atraso em segundos antes de enviar a mensagem",
             "example": 2000
           }
         }
@@ -221,12 +221,12 @@
         "properties": {
           "number": {
             "type": "string",
-            "description": "WhatsApp number to send the message to",
+            "description": "Número do WhatsApp para enviar a mensagem",
             "example": "5511999999999"
           },
           "source": {
             "type": "string",
-            "description": "URL to an audio file or raw base64 encoded audio data (without any data URI scheme prefix like 'data:audio/mp3;base64,')",
+            "description": "URL para um arquivo de áudio ou dados do áudio codificados em base64 (sem qualquer prefixo do esquema URI de dados como 'data:audio/mp3;base64,')",
             "example": "https://example.com/audio.mp3"
           },
           "mentions": {
@@ -234,17 +234,17 @@
             "items": {
               "type": "string"
             },
-            "description": "(Optional) An array of JIDs or phone numbers to mention in the caption",
+            "description": "(Opcional) Um array de JIDs ou números de telefone para mencionar na legenda",
             "example": ["5511999999999", "5511999999999@s.whatsapp.net"]
           },
           "quoted": {
             "type": "string",
-            "description": "(Optional) Message ID of the message to quote",
+            "description": "(Opcional) ID da mensagem para citar",
             "example": "3EB0B5EED74106A7F4EC06"
           },
           "delay": {
             "type": "number",
-            "description": "(Optional) Delay in seconds before sending the message",
+            "description": "(Opcional) Atraso em segundos antes de enviar a mensagem",
             "example": 2000
           }
         }
@@ -255,22 +255,22 @@
         "properties": {
           "number": {
             "type": "string",
-            "description": "WhatsApp number to send the message to",
+            "description": "Número do WhatsApp para enviar a mensagem",
             "example": "5511999999999"
           },
           "source": {
             "type": "string",
-            "description": "URL to a document file or raw base64 encoded document data (without any data URI scheme prefix like 'data:application/pdf;base64,')",
+            "description": "URL para um arquivo de documento ou dados do documento codificados em base64 (sem qualquer prefixo do esquema URI de dados como 'data:application/pdf;base64,')",
             "example": "https://example.com/document.pdf"
           },
           "fileName": {
             "type": "string",
-            "description": "(Optional) Custom filename for the document",
+            "description": "(Opcional) Nome personalizado para o arquivo do documento",
             "example": "my-document.pdf"
           },
           "caption": {
             "type": "string",
-            "description": "(Optional) Caption for the document",
+            "description": "(Opcional) Legenda para o documento",
             "example": "Check out this document!"
           },
           "mentions": {
@@ -278,17 +278,17 @@
             "items": {
               "type": "string"
             },
-            "description": "(Optional) An array of JIDs or phone numbers to mention in the caption",
+            "description": "(Opcional) Um array de JIDs ou números de telefone para mencionar na legenda",
             "example": ["5511999999999", "5511999999999@s.whatsapp.net"]
           },
           "quoted": {
             "type": "string",
-            "description": "(Optional) Message ID of the message to quote",
+            "description": "(Opcional) ID da mensagem para citar",
             "example": "3EB0B5EED74106A7F4EC06"
           },
           "delay": {
             "type": "number",
-            "description": "(Optional) Delay in seconds before sending the message",
+            "description": "(Opcional) Atraso em segundos antes de enviar a mensagem",
             "example": 2000
           }
         }
@@ -298,7 +298,7 @@
         "properties": {
           "number": {
             "type": "string",
-            "description": "WhatsApp number to send the message to",
+            "description": "Número do WhatsApp para enviar a mensagem",
             "example": "5511999999999"
           },
           "contact": {
@@ -306,17 +306,17 @@
             "properties": {
               "phoneNumber": {
                 "type": "string",
-                "description": "The contact's phone number",
+                "description": "O número de telefone do contato",
                 "example": "5511999999999"
               },
               "firstName": {
                 "type": "string",
-                "description": "The contact's first name",
+                "description": "O primeiro nome do contato",
                 "example": "John"
               },
               "lastName": {
                 "type": "string",
-                "description": "The contact's last name",
+                "description": "O sobrenome do contato",
                 "example": "Doe"
               }
             },
@@ -324,7 +324,7 @@
           },
           "delay": {
             "type": "number",
-            "description": "(Optional) Delay in seconds before sending the message (typing...)",
+            "description": "(Opcional) Atraso em segundos antes de enviar a mensagem (digitando...)",
             "example": 2000
           }
         },
@@ -335,27 +335,27 @@
         "properties": {
           "number": {
             "type": "string",
-            "description": "WhatsApp number to send the message to",
+            "description": "Número do WhatsApp para enviar a mensagem",
             "example": "5511999999999"
           },
           "latitude": {
             "type": "number",
-            "description": "Latitude of the location",
+            "description": "Latitude da localização",
             "example": -22.9110137
           },
           "longitude": {
             "type": "number",
-            "description": "Longitude of the location",
+            "description": "Longitude da localização",
             "example": -43.2093727
           },
           "address": {
             "type": "string",
-            "description": "Address of the location",
+            "description": "Endereço da localização",
             "example": "Rua das Flores, 123"
           },
           "name": {
             "type": "string",
-            "description": "Name of the location",
+            "description": "Nome da localização",
             "example": "Casa do João"
           }
         },
@@ -402,27 +402,27 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "Unique identifier for the webhook"
+            "description": "Identificador único do webhook"
           },
           "url": {
             "type": "string",
-            "description": "URL where webhook events will be sent"
+            "description": "URL onde os eventos do webhook serão enviados"
           },
           "displayName": {
             "type": "string",
-            "description": "Optional display name for the webhook"
+            "description": "Nome de exibição opcional para o webhook"
           },
           "enabled": {
             "type": "boolean",
-            "description": "Whether the webhook is active"
+            "description": "Se o webhook está ativo"
           },
           "events": {
             "$ref": "#/components/schemas/WebhookEventsSchema",
-            "description": "Configuration of which events this webhook subscribes to"
+            "description": "Configuração de quais eventos este webhook assina"
           },
           "headers": {
             "type": "object",
-            "description": "Custom headers to be sent with webhook requests",
+            "description": "Cabeçalhos personalizados a serem enviados com as requisições do webhook",
             "additionalProperties": {
               "type": "string"
             }
@@ -430,11 +430,11 @@
           "createdAt": {
             "type": "string",
             "format": "date-time",
-            "description": "When the webhook was created"
+            "description": "Quando o webhook foi criado"
           },
           "waSessionId": {
             "type": "string",
-            "description": "ID of the WhatsApp session this webhook belongs to"
+            "description": "ID da sessão do WhatsApp a que este webhook pertence"
           }
         }
       },
@@ -453,15 +453,15 @@
           },
           "page": {
             "type": "string",
-            "description": "Current page number"
+            "description": "Número da página atual"
           },
           "pageSize": {
             "type": "string",
-            "description": "Number of items per page"
+            "description": "Número de itens por página"
           },
           "total": {
             "type": "number",
-            "description": "Total number of webhooks"
+            "description": "Número total de webhooks"
           }
         }
       },
@@ -604,12 +604,12 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "The name of the group",
+            "description": "O nome do grupo",
             "example": "My Group"
           },
           "description": {
             "type": "string",
-            "description": "The description of the group",
+            "description": "A descrição do grupo",
             "example": "This is a group for my friends"
           }
         }
@@ -620,12 +620,12 @@
         "properties": {
           "identifier": {
             "type": "string",
-            "description": "The phone number or group id of the contact or group to update the display picture for.",
+            "description": "O número de telefone ou ID do grupo do contato ou grupo para atualizar a foto de perfil",
             "example": "120363333119256884@g.us"
           },
           "source": {
             "type": "string",
-            "description": "URL or base64 encoded string for the new display picture.",
+            "description": "URL ou string codificada em base64 para a nova foto de perfil",
             "example": "https://example.com/image.jpg"
           }
         }
@@ -636,7 +636,7 @@
         "properties": {
           "status": {
             "type": "string",
-            "description": "New profile status."
+            "description": "Novo status do perfil (sobre) a ser definido"
           }
         }
       },
@@ -646,7 +646,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "New profile name."
+            "description": "Novo nome do perfil a ser definido"
           }
         }
       },
@@ -655,27 +655,27 @@
         "properties": {
           "lastSeen": {
             "type": "string",
-            "description": "Privacy level for last seen (e.g., 'everyone', 'contacts', 'nobody')"
+            "description": "Nível de privacidade para última visualização (ex: 'everyone', 'contacts', 'nobody')"
           },
           "online": {
             "type": "string",
-            "description": "Privacy level for online status"
+            "description": "Nível de privacidade para status online"
           },
           "profilePicture": {
             "type": "string",
-            "description": "Privacy level for profile picture"
+            "description": "Nível de privacidade para foto de perfil"
           },
           "status": {
             "type": "string",
-            "description": "Privacy level for status"
+            "description": "Nível de privacidade para status"
           },
           "readReceipts": {
             "type": "string",
-            "description": "Privacy level for read receipts"
+            "description": "Nível de privacidade para confirmações de leitura"
           },
           "groupsAdd": {
             "type": "string",
-            "description": "Privacy level for groups add"
+            "description": "Nível de privacidade para adição em grupos"
           }
         }
       },
@@ -685,7 +685,7 @@
         "properties": {
           "privacy": {
             "type": "string",
-            "description": "New privacy setting (e.g., 'everyone', 'contacts', 'nobody')"
+            "description": "Nova configuração de privacidade (ex: 'everyone', 'contacts', 'nobody')"
           }
         }
       },
@@ -695,7 +695,7 @@
         "properties": {
           "mode": {
             "type": "string",
-            "description": "Default disappearing mode (e.g., '24h', '7d', 'custom')"
+            "description": "Modo de desaparecimento padrão (ex: '24h', '7d', 'custom')"
           }
         }
       },
@@ -703,9 +703,9 @@
         "type": "array",
         "items": {
           "type": "string",
-          "description": "Phone number of a participant in international format without the '+' sign (e.g., '5511999999999')"
+          "description": "Número de telefone de um participante em formato internacional sem o sinal '+' (ex: '5511999999999')"
         },
-        "description": "Array of phone numbers representing WhatsApp group participants",
+        "description": "Array de números de telefone representando participantes de um grupo do WhatsApp",
         "example": ["5511999999999", "5522888888888"]
       }
     }
@@ -718,23 +718,23 @@
   "tags": [
     {
       "name": "Messages",
-      "description": "Message sending operations"
+      "description": "Operações de envio de mensagens"
     },
     {
       "name": "Webhooks",
-      "description": "Webhook management operations"
+      "description": "Operações de gerenciamento de webhooks"
     },
     {
       "name": "Actions",
-      "description": "WhatsApp actions like profile management and contact operations"
+      "description": "Ações do WhatsApp como gerenciamento de perfil e operações de contato"
     },
     {
       "name": "Groups",
-      "description": "WhatsApp group management operations"
+      "description": "Operações de gerenciamento de grupos do WhatsApp"
     },
     {
       "name": "Privacy",
-      "description": "Privacy settings management"
+      "description": "Gerenciamento de configurações de privacidade"
     }
   ],
   "paths": {
@@ -747,7 +747,7 @@
       "post": {
         "tags": ["Messages"],
         "summary": "Send text message",
-        "description": "Sends a text message to a specified WhatsApp number.",
+        "description": "Envia uma mensagem de texto para um número específico do WhatsApp.",
         "requestBody": {
           "required": true,
           "content": {
@@ -760,7 +760,7 @@
         },
         "responses": {
           "200": {
-            "description": "Text message sent successfully",
+            "description": "Mensagem de texto enviada com sucesso",
             "content": {
               "application/json": {
                 "schema": {
@@ -770,7 +770,7 @@
             }
           },
           "400": {
-            "description": "Invalid request",
+            "description": "Requisição inválida",
             "content": {
               "application/json": {
                 "schema": {
@@ -780,7 +780,7 @@
             }
           },
           "500": {
-            "description": "Internal server error",
+            "description": "Erro interno do servidor",
             "content": {
               "application/json": {
                 "schema": {
@@ -801,7 +801,7 @@
       "post": {
         "tags": ["Messages"],
         "summary": "Send image message",
-        "description": "Sends an image message to a specified WhatsApp number. The 'source' parameter can be either a URL to an image or a raw base64 encoded string of the image data (without any data URI scheme prefix).",
+        "description": "Envia uma mensagem com imagem para um número específico do WhatsApp. O parâmetro 'source' pode ser uma URL para uma imagem ou uma string base64 da imagem (sem qualquer prefixo do esquema URI de dados).",
         "requestBody": {
           "required": true,
           "content": {
@@ -814,7 +814,7 @@
         },
         "responses": {
           "200": {
-            "description": "Image message sent successfully",
+            "description": "Mensagem com imagem enviada com sucesso",
             "content": {
               "application/json": {
                 "schema": {
@@ -824,7 +824,7 @@
             }
           },
           "400": {
-            "description": "Invalid request",
+            "description": "Requisição inválida",
             "content": {
               "application/json": {
                 "schema": {
@@ -834,7 +834,7 @@
             }
           },
           "500": {
-            "description": "Internal server error",
+            "description": "Erro interno do servidor",
             "content": {
               "application/json": {
                 "schema": {
@@ -855,7 +855,7 @@
       "post": {
         "tags": ["Messages"],
         "summary": "Send video message",
-        "description": "Sends a video message to a specified WhatsApp number. The 'source' parameter can be either a URL to a video file or a raw base64 encoded string of the video data (without any data URI scheme prefix).",
+        "description": "Envia uma mensagem com vídeo para um número específico do WhatsApp. O parâmetro 'source' pode ser uma URL para um arquivo de vídeo ou uma string base64 do vídeo (sem qualquer prefixo do esquema URI de dados).",
         "requestBody": {
           "required": true,
           "content": {
@@ -868,7 +868,7 @@
         },
         "responses": {
           "200": {
-            "description": "Video message sent successfully",
+            "description": "Mensagem com vídeo enviada com sucesso",
             "content": {
               "application/json": {
                 "schema": {
@@ -878,7 +878,7 @@
             }
           },
           "400": {
-            "description": "Invalid request",
+            "description": "Requisição inválida",
             "content": {
               "application/json": {
                 "schema": {
@@ -888,7 +888,7 @@
             }
           },
           "500": {
-            "description": "Internal server error",
+            "description": "Erro interno do servidor",
             "content": {
               "application/json": {
                 "schema": {
@@ -909,7 +909,7 @@
       "post": {
         "tags": ["Messages"],
         "summary": "Send audio message",
-        "description": "Sends an audio message to a specified WhatsApp number. The 'source' parameter can be either a URL to an audio file or a raw base64 encoded string of the audio data (without any data URI scheme prefix).",
+        "description": "Envia uma mensagem de áudio para um número específico do WhatsApp. O parâmetro 'source' pode ser uma URL para um arquivo de áudio ou uma string base64 do áudio (sem qualquer prefixo do esquema URI de dados).",
         "requestBody": {
           "required": true,
           "content": {
@@ -922,7 +922,7 @@
         },
         "responses": {
           "200": {
-            "description": "Audio message sent successfully",
+            "description": "Mensagem de áudio enviada com sucesso",
             "content": {
               "application/json": {
                 "schema": {
@@ -932,7 +932,7 @@
             }
           },
           "400": {
-            "description": "Invalid request",
+            "description": "Requisição inválida",
             "content": {
               "application/json": {
                 "schema": {
@@ -942,7 +942,7 @@
             }
           },
           "500": {
-            "description": "Internal server error",
+            "description": "Erro interno do servidor",
             "content": {
               "application/json": {
                 "schema": {
@@ -963,7 +963,7 @@
       "post": {
         "tags": ["Messages"],
         "summary": "Send document message",
-        "description": "Sends a document message to a specified WhatsApp number. The 'source' parameter can be either a URL to a document file or a raw base64 encoded string of the document data (without any data URI scheme prefix).",
+        "description": "Envia uma mensagem com documento para um número específico do WhatsApp. O parâmetro 'source' pode ser uma URL para um arquivo ou uma string base64 do documento (sem qualquer prefixo do esquema URI de dados).",
         "requestBody": {
           "required": true,
           "content": {
@@ -976,7 +976,7 @@
         },
         "responses": {
           "200": {
-            "description": "Document message sent successfully",
+            "description": "Mensagem com documento enviada com sucesso",
             "content": {
               "application/json": {
                 "schema": {
@@ -986,7 +986,7 @@
             }
           },
           "400": {
-            "description": "Invalid request",
+            "description": "Requisição inválida",
             "content": {
               "application/json": {
                 "schema": {
@@ -996,7 +996,7 @@
             }
           },
           "500": {
-            "description": "Internal server error",
+            "description": "Erro interno do servidor",
             "content": {
               "application/json": {
                 "schema": {
@@ -1017,7 +1017,7 @@
       "post": {
         "tags": ["Messages"],
         "summary": "Send contact message",
-        "description": "Sends a contact message to a specified WhatsApp number.",
+        "description": "Envia uma mensagem com contato para um número específico do WhatsApp.",
         "requestBody": {
           "required": true,
           "content": {
@@ -1030,7 +1030,7 @@
         },
         "responses": {
           "200": {
-            "description": "Contact message sent successfully",
+            "description": "Mensagem com contato enviada com sucesso",
             "content": {
               "application/json": {
                 "schema": {
@@ -1040,7 +1040,7 @@
             }
           },
           "400": {
-            "description": "Invalid request",
+            "description": "Requisição inválida",
             "content": {
               "application/json": {
                 "schema": {
@@ -1050,7 +1050,7 @@
             }
           },
           "500": {
-            "description": "Internal server error",
+            "description": "Erro interno do servidor",
             "content": {
               "application/json": {
                 "schema": {
@@ -1071,7 +1071,7 @@
       "post": {
         "tags": ["Messages"],
         "summary": "Send location message",
-        "description": "Sends a location message to a specified WhatsApp number. At least one of either address or coordinates is required. When both are provided, coordinates take precedence. When latitude and longitude are not provided, we try to look up the address for you.",
+        "description": "Envia uma mensagem com localização para um número específico do WhatsApp. É necessário fornecer pelo menos um endereço ou coordenadas. Quando ambos são fornecidos, as coordenadas têm prioridade. Quando latitude e longitude não são fornecidas, tentamos buscar o endereço automaticamente.",
         "requestBody": {
           "required": true,
           "content": {
@@ -1084,7 +1084,7 @@
         },
         "responses": {
           "200": {
-            "description": "Location message sent successfully",
+            "description": "Mensagem com localização enviada com sucesso",
             "content": {
               "application/json": {
                 "schema": {
@@ -1094,7 +1094,7 @@
             }
           },
           "400": {
-            "description": "Invalid request",
+            "description": "Requisição inválida",
             "content": {
               "application/json": {
                 "schema": {
@@ -1104,7 +1104,7 @@
             }
           },
           "500": {
-            "description": "Internal server error",
+            "description": "Erro interno do servidor",
             "content": {
               "application/json": {
                 "schema": {
@@ -1125,10 +1125,10 @@
       "get": {
         "tags": ["Webhooks"],
         "summary": "Get webhooks",
-        "description": "Retrieves all webhooks for the specified session",
+        "description": "Recupera todos os webhooks para a sessão especificada",
         "responses": {
           "200": {
-            "description": "List of webhooks",
+            "description": "Lista de webhooks",
             "content": {
               "application/json": {
                 "schema": {
@@ -1142,7 +1142,7 @@
       "post": {
         "tags": ["Webhooks"],
         "summary": "Create webhook",
-        "description": "Creates a new webhook for the specified session",
+        "description": "Cria um novo webhook para a sessão especificada",
         "requestBody": {
           "required": true,
           "content": {
@@ -1155,7 +1155,7 @@
         },
         "responses": {
           "201": {
-            "description": "Webhook created successfully",
+            "description": "Webhook criado com sucesso",
             "content": {
               "application/json": {
                 "schema": {
@@ -1165,7 +1165,7 @@
             }
           },
           "400": {
-            "description": "Invalid request body",
+            "description": "Corpo da requisição inválido",
             "content": {
               "application/json": {
                 "schema": {
@@ -1175,7 +1175,7 @@
             }
           },
           "404": {
-            "description": "Session not found",
+            "description": "Sessão não encontrada",
             "content": {
               "application/json": {
                 "schema": {
@@ -1185,7 +1185,7 @@
             }
           },
           "500": {
-            "description": "Server error",
+            "description": "Erro do servidor",
             "content": {
               "application/json": {
                 "schema": {
@@ -1209,7 +1209,7 @@
       "put": {
         "tags": ["Webhooks"],
         "summary": "Update webhook",
-        "description": "Updates an existing webhook for the specified session",
+        "description": "Atualiza um webhook existente para a sessão especificada",
         "requestBody": {
           "required": true,
           "content": {
@@ -1291,7 +1291,7 @@
       "delete": {
         "tags": ["Webhooks"],
         "summary": "Delete webhook",
-        "description": "Deletes an existing webhook for the specified session",
+        "description": "Exclui um webhook existente para a sessão especificada",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -1338,7 +1338,7 @@
       "get": {
         "tags": ["Webhooks"],
         "summary": "Get webhook logs",
-        "description": "Retrieves logs for a specific webhook with pagination and filtering options",
+        "description": "Recupera logs para um webhook específico com opções de paginação e filtragem",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -1499,7 +1499,7 @@
       "get": {
         "tags": ["Groups"],
         "summary": "List groups",
-        "description": "Retrieves a list of groups associated with the session.",
+        "description": "Recupera uma lista de grupos associados à sessão",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -1560,7 +1560,7 @@
       "post": {
         "tags": ["Groups"],
         "summary": "Create group",
-        "description": "Creates a new group for the session.",
+        "description": "Cria um novo grupo para a sessão",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -1630,7 +1630,7 @@
       "put": {
         "tags": ["Groups"],
         "summary": "Update group",
-        "description": "Updates group details such as subject, description, and admin settings.",
+        "description": "Atualiza detalhes do grupo como assunto, descrição e configurações de administrador",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -1703,7 +1703,7 @@
       "post": {
         "tags": ["Groups"],
         "summary": "Send group invite",
-        "description": "Sends an invitation to join the specified group.",
+        "description": "Envia um convite para entrar no grupo especificado",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -1770,7 +1770,7 @@
       "post": {
         "tags": ["Groups"],
         "summary": "Add participants",
-        "description": "Adds participants to a WhatsApp group.",
+        "description": "Adiciona participantes a um grupo do WhatsApp",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -1833,7 +1833,7 @@
       "post": {
         "tags": ["Groups"],
         "summary": "Remove participants",
-        "description": "Removes participants from a WhatsApp group.",
+        "description": "Remove participantes de um grupo do WhatsApp",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -1896,7 +1896,7 @@
       "post": {
         "tags": ["Groups"],
         "summary": "Promote",
-        "description": "Promotes participants to admin status in a WhatsApp group.",
+        "description": "Promove participantes a administradores em um grupo do WhatsApp",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -1959,7 +1959,7 @@
       "post": {
         "tags": ["Groups"],
         "summary": "Demote",
-        "description": "Demotes admins to regular participants in a WhatsApp group.",
+        "description": "Rebaixa administradores a participantes comuns em um grupo do WhatsApp",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -2022,7 +2022,7 @@
       "post": {
         "tags": ["Groups"],
         "summary": "Get group invite code",
-        "description": "Retrieves the invite code for a WhatsApp group.",
+        "description": "Recupera o código de convite para um grupo do WhatsApp",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -2079,7 +2079,7 @@
       "post": {
         "tags": ["Groups"],
         "summary": "Revoke group invite code",
-        "description": "Revokes the current invite code and generates a new one for a WhatsApp group.",
+        "description": "Revoga o código de convite atual e gera um novo para um grupo do WhatsApp",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -2140,7 +2140,7 @@
       "post": {
         "tags": ["Groups"],
         "summary": "Leave group",
-        "description": "Leaves a WhatsApp group.",
+        "description": "Sai de um grupo do WhatsApp",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -2193,7 +2193,7 @@
       "get": {
         "tags": ["Actions"],
         "summary": "Get display picture",
-        "description": "Retrieves the display picture for the WhatsApp session.",
+        "description": "Recupera a foto de perfil do identificador fornecido. O identificador pode ser um número de telefone ou um ID de grupo",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -2234,7 +2234,7 @@
       "put": {
         "tags": ["Actions"],
         "summary": "Update display picture",
-        "description": "Updates the display picture for the WhatsApp session.",
+        "description": "Atualiza a foto de perfil de um grupo ou da sessão conectada atual. O identificador pode ser um número de telefone ou um ID de grupo",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -2278,7 +2278,7 @@
       "put": {
         "tags": ["Actions"],
         "summary": "Update profile status",
-        "description": "Updates the profile status (about) of the WhatsApp session.",
+        "description": "Atualiza o status do perfil (sobre) da sessão do WhatsApp conectada",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -2322,7 +2322,7 @@
       "put": {
         "tags": ["Actions"],
         "summary": "Update profile name",
-        "description": "Updates the profile name of the WhatsApp session.",
+        "description": "Atualiza o nome do perfil da sessão do WhatsApp conectada",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -2366,7 +2366,7 @@
       "get": {
         "tags": ["Actions"],
         "summary": "Is contact is on wpp",
-        "description": "Checks if the given contact JID is registered on WhatsApp.",
+        "description": "Verifica se o JID do contato fornecido (número de telefone ou ID de grupo) está registrado no WhatsApp",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -2403,7 +2403,7 @@
       "get": {
         "tags": ["Actions"],
         "summary": "Get contact about info",
-        "description": "Retrieves the 'about' information for the specified contact.",
+        "description": "Recupera as informações 'sobre' do contato especificado",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -2440,7 +2440,7 @@
       "put": {
         "tags": ["Actions"],
         "summary": "Block contact",
-        "description": "Blocks the specified contact by JID.",
+        "description": "Bloqueia o contato especificado pelo JID",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -2477,7 +2477,7 @@
       "put": {
         "tags": ["Actions"],
         "summary": "Unblock contact",
-        "description": "Unblocks the specified contact by JID.",
+        "description": "Desbloqueia o contato especificado pelo JID",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -2514,7 +2514,7 @@
       "get": {
         "tags": ["Privacy"],
         "summary": "Get privacy settings",
-        "description": "Retrieves the current privacy settings for the specified session.",
+        "description": "Recupera as configurações de privacidade atuais para a sessão especificada",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -2558,7 +2558,7 @@
       "put": {
         "tags": ["Privacy"],
         "summary": "Update last seen privacy",
-        "description": "Updates the last seen privacy setting for the session.",
+        "description": "Atualiza a configuração de privacidade de última visualização para a sessão",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -2612,7 +2612,7 @@
       "put": {
         "tags": ["Privacy"],
         "summary": "Update online privacy",
-        "description": "Updates the online privacy setting for the session.",
+        "description": "Atualiza a configuração de privacidade online para a sessão",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -2666,7 +2666,7 @@
       "put": {
         "tags": ["Privacy"],
         "summary": "Update profile picture privacy",
-        "description": "Updates the privacy setting for the session's profile picture.",
+        "description": "Atualiza a configuração de privacidade da foto de perfil da sessão",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -2720,7 +2720,7 @@
       "put": {
         "tags": ["Privacy"],
         "summary": "Update status privacy",
-        "description": "Updates the privacy setting for the session's status.",
+        "description": "Atualiza a configuração de privacidade do status da sessão",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -2774,7 +2774,7 @@
       "put": {
         "tags": ["Privacy"],
         "summary": "Update read receipts privacy",
-        "description": "Updates the privacy setting for read receipts in the session.",
+        "description": "Atualiza a configuração de privacidade das confirmações de leitura na sessão",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -2828,7 +2828,7 @@
       "put": {
         "tags": ["Privacy"],
         "summary": "Update groups add privacy",
-        "description": "Updates the setting that controls who can add the session to groups.",
+        "description": "Atualiza a configuração que controla quem pode adicionar a sessão a grupos",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
@@ -2882,7 +2882,7 @@
       "put": {
         "tags": ["Privacy"],
         "summary": "Update default disappearing mode",
-        "description": "Updates the default disappearing mode for messages in the session.",
+        "description": "Atualiza o modo de desaparecimento padrão para mensagens na sessão",
         "parameters": [
           {
             "$ref": "#/components/parameters/sessionId"
