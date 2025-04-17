@@ -655,7 +655,7 @@
         "properties": {
           "lastSeen": {
             "type": "string",
-            "description": "Nível de privacidade para última visualização (ex: 'everyone', 'contacts', 'nobody')"
+            "description": "Nível de privacidade para última visualização (ex: 'contacts', 'all', 'contact_blacklist', 'none')"
           },
           "online": {
             "type": "string",
@@ -719,6 +719,16 @@
           }
         }
       },
+      "UpdateLastSeenPrivacyValue": {
+        "type": "object",
+        "required": ["privacy"],
+        "properties": {
+          "privacy": {
+            "type": "string",
+            "description": "Nova configuração de privacidade para última visualização (ex: 'contacts', 'all', 'contact_blacklist', 'none')"
+          }
+        }
+      },
       "UpdatePrivacyValue": {
         "type": "object",
         "required": ["privacy"],
@@ -735,7 +745,7 @@
         "properties": {
           "mode": {
             "type": "string",
-            "description": "Modo de desaparecimento padrão (ex: '24h', '7d', 'custom')"
+            "description": "Modo de desaparecimento padrão (ex: 'ONE_DAY', 'ONE_WEEK', 'THREE_MONTHS', 'OFF')"
           }
         }
       },
@@ -2609,7 +2619,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdatePrivacyValue"
+                "$ref": "#/components/schemas/UpdateLastSeenPrivacyValue"
               }
             }
           }
