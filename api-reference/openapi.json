@@ -600,9 +600,9 @@
       },
       "CreateGroupSchema": {
         "type": "object",
-        "required": ["name"],
+        "required": ["subject"],
         "properties": {
-          "name": {
+          "subject": {
             "type": "string",
             "description": "O nome do grupo",
             "example": "My Group"
