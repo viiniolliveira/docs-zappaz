@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https:/api.zappaz.io/api/v1",
+      "url": "https://api.zappaz.io/api/v1",
       "description": "Servidor de API de Desenvolvimento"
     }
   ],
