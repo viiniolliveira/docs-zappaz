@@ -229,6 +229,11 @@
             "description": "URL para um arquivo de áudio ou dados do áudio codificados em base64 (sem qualquer prefixo do esquema URI de dados como 'data:audio/mp3;base64,')",
             "example": "https://example.com/audio.mp3"
           },
+          "asVoiceNote": {
+            "type": "boolean",
+            "description": "Se deve enviar o áudio como nota de voz (Audio com ondas)",
+            "example": true
+          },
           "mentions": {
             "type": "array",
             "items": {
