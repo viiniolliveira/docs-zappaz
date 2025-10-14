@@ -47,6 +47,15 @@
           "type": "string"
         },
         "description": "JID do WhatsApp do contato"
+      },
+      "messageId": {
+        "in": "path",
+        "name": "messageId",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "ID da mensagem a ser deletada"
       }
     },
     "schemas": {
@@ -80,6 +89,78 @@
           "clientConnectionName": {
             "type": "string",
             "description": "O nome da conexão do cliente. Este nome é mostrado na lista de clientes conectados"
+          }
+        }
+      },
+      "StripeSubscription": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identificador único da assinatura Stripe"
+          },
+          "subscriptionId": {
+            "type": "string",
+            "description": "ID da assinatura no Stripe"
+          },
+          "waSessionId": {
+            "type": "string",
+            "description": "ID da sessão do WhatsApp associada"
+          },
+          "status": {
+            "type": "string",
+            "description": "Status da assinatura"
+          },
+          "customerId": {
+            "type": "string",
+            "description": "ID do cliente no Stripe"
+          },
+          "subscriptionItemId": {
+            "type": "string",
+            "description": "ID do item da assinatura no Stripe"
+          },
+          "subscriptionItemAmount": {
+            "type": "number",
+            "description": "Valor da assinatura em centavos"
+          },
+          "latestInvoice": {
+            "type": "string",
+            "description": "ID da última fatura"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "description": "Descrição da assinatura"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data de início da assinatura"
+          },
+          "trialEnd": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data de fim do período de teste"
+          },
+          "currentPeriodEnd": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data de fim do período atual"
+          },
+          "currentPeriodStart": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data de início do período atual"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data de criação da assinatura"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data da última atualização"
           }
         }
       },
@@ -121,6 +202,11 @@
             "description": "(Opcional) Se deve incluir uma prévia do link quando uma mensagem contém um link"
           }
         }
+      },
+      "DeleteMessage": {
+        "type": "object",
+        "required": ["sessionId", "messageId"]
+
       },
       "ImageMessage": {
         "type": "object",
@@ -762,6 +848,16 @@
         },
         "description": "Array de números de telefone representando participantes de um grupo do WhatsApp",
         "example": ["5511999999999", "5522888888888"]
+      },
+      "SessionConnectResponse": {
+        "type": "object",
+        "properties": {
+          "qrCodeBase64": {
+            "type": "string",
+            "description": "Código QR em formato base64 para conectar ao WhatsApp",
+            "example": "iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAABhGlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw0AcxV9TpSIVB4uIOGSoThZERRy1CkWoEGqFVh1MLv2CJg1Jiouj4Fpw8GOx6uDirKuDqyAIfoA4OjkpukiJ/0sKLWI8OO7Hu3uPu3eAUC8zzeoYBzTdNlOJuJjJroqdrygiiBBGADMyM/WkdDoN3/F1jwBfv4vxLO+6P0evmrMY4BOJU8wwbeIN4ulN2+C8TxxhRVklPiceNemCxI9cVzx+41xwWeCZETOdmiOOEIuFNlbamBVNjXiKOKpqOuULGY9VzluctXKVNe/JXxjO6ctLXKc5hAQWsAgJIhRUsIkybbgo0aqTYiFF+3EPf8jxJ8klk6sMRo4FVKBBdvzgf/C7W6swOeElBWNA54vtfowAnV2gUbPt72PbbpwA/mfgSm/5K3Vg5pP0WkuLHAG928DFdUuT94DLHWDgSZcMyZECNIX8PPB+Rt+UBfpvgZ41r7fmPk4fgDR1lbgBDg6B0QJlr3u8u6u9t3/PNPv7ARNvcmj0N+7cAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5QgcDgMH8NPUQAAACG9JREFUeNrt..."
+          }
+        }
       }
     }
   },
@@ -771,6 +867,10 @@
     }
   ],
   "tags": [
+    {
+      "name": "Sessions",
+      "description": "Operações de gerenciamento de sessões"
+    },
     {
       "name": "Messages",
       "description": "Operações de envio de mensagens"
@@ -793,6 +893,250 @@
     }
   ],
   "paths": {
+    "/session/{sessionId}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/sessionId"
+        }
+      ],
+      "get": {
+        "tags": ["Sessions"],
+        "summary": "Get session details",
+        "description": "Recupera detalhes de uma sessão específica, incluindo informações opcionais de assinatura",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "includeSubscription",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Se deve incluir informações de assinatura na resposta"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes da sessão recuperados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Identificador único da sessão",
+                      "example": "05f02fa6-d7b0-4120-9f08-f60cd7337c72"
+                    },
+                    "token": {
+                      "type": "string",
+                      "description": "Token JWT da sessão",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    },
+                    "displayName": {
+                      "type": "string",
+                      "description": "Nome de exibição da sessão",
+                      "example": "Zappaz - Prod"
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Status atual da sessão",
+                      "example": "open"
+                    },
+                    "jid": {
+                      "type": "string",
+                      "description": "JID do WhatsApp da sessão",
+                      "example": "5519981979779@s.whatsapp.net"
+                    },
+                    "profilePictureUrl": {
+                      "type": "string",
+                      "description": "URL da foto de perfil do WhatsApp",
+                      "example": "https://pps.whatsapp.net/v/t61.24694-24/..."
+                    },
+                    "enabled": {
+                      "type": "boolean",
+                      "description": "Se a sessão está habilitada"
+                    },
+                    "archived": {
+                      "type": "boolean",
+                      "description": "Se a sessão está arquivada"
+                    },
+                    "disconnectedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true,
+                      "description": "Data da última desconexão"
+                    },
+                    "connectedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Data da última conexão"
+                    },
+                    "userId": {
+                      "type": "string",
+                      "description": "ID do usuário proprietário da sessão"
+                    },
+                    "workerNodeId": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "ID do nó do worker"
+                    },
+                    "stripeSubscription": {
+                      "$ref": "#/components/schemas/StripeSubscription",
+                      "description": "Informações da assinatura Stripe (apenas quando includeSubscription=true)"
+                    },
+                    "config": {
+                      "$ref": "#/components/schemas/SessionConfig",
+                      "description": "Configurações da sessão"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sessão não encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/session/{sessionId}/connect": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/sessionId"
+        }
+      ],
+      "post": {
+        "tags": ["Sessions"],
+        "summary": "Connect session",
+        "description": "Inicia o processo de conexão de uma sessão do WhatsApp e retorna um código QR em base64 para escaneamento",
+        "responses": {
+          "200": {
+            "description": "Código QR gerado com sucesso para conexão",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionConnectResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sessão não encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/session/{sessionId}/logout": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/sessionId"
+        }
+      ],
+      "put": {
+        "tags": ["Sessions"],
+        "summary": "Logout session",
+        "description": "Desconecta uma sessão do WhatsApp e faz logout da conta",
+        "responses": {
+          "200": {
+            "description": "Sessão desconectada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": ["success"],
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Mensagem de confirmação do logout",
+                      "example": "Session logged out: 05f12ga6-a5b0-4120-9f10-f60cd7337c89"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sessão não encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/session/{sessionId}/message/text": {
       "parameters": [
         {
@@ -1140,6 +1484,53 @@
         "responses": {
           "200": {
             "description": "Mensagem com localização enviada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/session/{sessionId}/message/{messageId}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/sessionId"
+        },
+        {
+          "$ref": "#/components/parameters/messageId"
+        }
+      ],
+      "delete": {
+        "tags": ["Messages"],
+        "summary": "Delete message",
+        "description": "Deleta uma mensagem para todos os participantes na conversa.",
+        "responses": {
+          "200": {
+            "description": "Mensagem de texto enviada com sucesso",
             "content": {
               "application/json": {
                 "schema": {
